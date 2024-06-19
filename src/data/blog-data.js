@@ -172,8 +172,8 @@ const blogData = [
     comments:12,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Time for Spring Cleaning? Use These Tips From the Professionals',
-    desc:'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat',
+    title:'Choosing the Perfect Diamond for Your Budget',
+    desc:'Find out how to select a beautiful diamond that fits your budget. Learn about the factors that influence diamond prices and discover strategies for getting the best value for your money.',
     blog:'blog-postbox'
   },
   // blog grid data 
@@ -186,8 +186,8 @@ const blogData = [
     comments:5,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Hiring the Right Sales Team at the Right Time',
-    desc:'Cursus mattis sociis natoque penatibus et magnis montes,nascetur ridiculus.',
+    title:'The Art of Diamond Setting: Enhancing Beauty and Brilliance',
+    desc:'Explore the various diamond setting styles and how they impact the overall look of a piece of jewelry. From prong and bezel to pavé and channel settings, understand the benefits and aesthetics of each option.',
     blog:'blog-grid'
   },
   {
@@ -199,8 +199,8 @@ const blogData = [
     comments:0,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Fully Embrace the Return of 90s fashion',
-    desc:'Cursus mattis sociis natoque penatibus et magnis montes,nascetur ridiculus.',
+    title:'Top Trends in Diamond Jewelry for 2024',
+    desc:'Stay ahead of the curve with the latest trends in diamond jewelry. Discover the hottest styles, designs, and innovations that are set to dominate the diamond market this year.',
     blog:'blog-grid'
   },
   {
@@ -212,8 +212,8 @@ const blogData = [
     comments:12,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Exploring the English Countryside',
-    desc:'Cursus mattis sociis natoque penatibus et magnis montes,nascetur ridiculus.',
+    title:'How to Spot a Fake Diamond: Tips for Buyers',
+    desc:'Arm yourself with knowledge to distinguish between real and fake diamonds. Learn about common imitation techniques and the tests you can perform to verify the authenticity of a diamond.',
     blog:'blog-grid'
   },
   {
@@ -225,8 +225,8 @@ const blogData = [
     comments:8,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Here’s the First Valentino’s New Makeup Collection',
-    desc:'Cursus mattis sociis natoque penatibus et magnis montes,nascetur ridiculus.',
+    title:'Diamond Engagement Rings: Finding the Perfect Symbol of Love',
+    desc:'Embark on the journey to find the perfect diamond engagement ring. Get expert advice on choosing the right ring that symbolizes your love and commitment, making your proposal unforgettable.',
     blog:'blog-grid'
   },
   {
@@ -238,8 +238,8 @@ const blogData = [
     comments:4,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Follow Your own Design process, whatever gets',
-    desc:'Cursus mattis sociis natoque penatibus et magnis montes,nascetur ridiculus.',
+    title:'The Environmental Impact of Diamond Mining',
+    desc:'Understand the environmental challenges associated with diamond mining. Learn about sustainable practices and how the industry is evolving to reduce its ecological footprint.',
     blog:'blog-grid'
   },
   {
@@ -251,8 +251,8 @@ const blogData = [
     comments:6,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Freelancer Days 2022, What’s new?',
-    desc:'Cursus mattis sociis natoque penatibus et magnis montes,nascetur ridiculus.',
+    title:'Diamonds in Pop Culture: Iconic Moments and Jewelry',
+    desc:'Explore how diamonds have been featured in movies, music, and fashion. From Marilyn Monroe’s "Diamonds Are a Girl’s Best Friend" to the iconic jewels worn by Hollywood stars, discover diamonds’ place in pop culture.',
     blog:'blog-grid'
   },
   {
@@ -264,8 +264,8 @@ const blogData = [
     comments:6,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Hiring the Right Sales Team at the Right Time',
-    desc:'Cursus mattis sociis natoque penatibus et magnis montes,nascetur ridiculus.',
+    title:'Diamond Jewelry for Special Occasions: Making Memories Last',
+    desc:'Find the perfect diamond jewelry for special occasions, from weddings and anniversaries to birthdays and graduations. Learn how to choose pieces that will become cherished keepsakes.',
     blog:'blog-grid'
   },
   {
@@ -277,8 +277,8 @@ const blogData = [
     comments:15,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Quality Foods Requirments For Every Human Body’s',
-    desc:'Cursus mattis sociis natoque penatibus et magnis montes,nascetur ridiculus.',
+    title:'The Science Behind Diamonds: From Formation to Facets',
+    desc:'Dive into the science of diamonds, from their formation deep within the Earth to the intricate facets that make them sparkle. Understand the geological processes and craftsmanship that bring diamonds to life.',
     blog:'blog-grid'
   },
 ];
