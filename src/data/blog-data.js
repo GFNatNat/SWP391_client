@@ -37,12 +37,12 @@ const blogData = [
     img: blog_1,
     date: "14 January, 2023",
     author:'Mark Smith',
-    title: "The Modern Art Clay Ceramics.",
+    title: "Understanding Diamond Cut: The Key to Sparkle.",
     tags: ["Tablet", "News"],
     category:'electronics',
     comments:2,
     sm_desc:
-      "The world is an amazing place providing an incredible assortment of interesting locations across.",
+      "Discover how the cut of a diamond affects its brilliance and overall appearance. Learn about the different types of cuts, from round brilliant to princess cut, and find out which one is right for you.",
     blog: "electronics",
   },
   {
@@ -50,12 +50,12 @@ const blogData = [
     img: blog_2,
     date: "18 February, 2023",
     author:'Naim Ahmed',
-    title: "How clothes are linked to climate",
+    title: "The 4Cs of Diamonds: A Comprehensive Guide",
     tags: ["Monitor", "Technology"],
     category:'electronics',
     comments:4,
     sm_desc:
-      "The world is an amazing place providing an incredible assortment of interesting locations across.",
+      "Explore the 4Cs of diamonds—cut, color, clarity, and carat weight. This guide will help you understand how each factor influences a diamond's quality and price, ensuring you make an informed purchase.",
     blog: "electronics",
   },
   {
@@ -63,12 +63,12 @@ const blogData = [
     img: blog_3,
     date: "20 January, 2023",
     author:'Salim Rana',
-    title: "The Sound Of Fashion: Malcolm",
+    title: "Diamond Certification: What You Need to Know",
     tags: ["Microphone", "Computer"],
     category:'electronics',
     comments:5,
     sm_desc:
-      "The world is an amazing place providing an incredible assortment of interesting locations across.",
+      "Learn about the importance of diamond certification and the major gemological laboratories that provide these services. Find out how to read a diamond certificate and why it matters when buying a diamond.",
     blog: "electronics",
   },
   // fashion blog
@@ -77,12 +77,12 @@ const blogData = [
     img: blog_4,
     date: "20 July, 2023",
     author:'John Smith',
-    title: "The 'Boomerang' Employees Returning After Quitting",
+    title: "Vintage vs. Modern Diamond Rings: Which Is Right for You?",
     tags: ["Fashion", "Lift Style","News"],
     category:'fashion',
     comments:6,
     sm_desc:
-      "The world is an amazing place providing an incredible assortment of interesting locations across.",
+      "Compare the timeless elegance of vintage diamond rings with the sleek, contemporary designs of modern rings. Discover the unique characteristics of each style and find the perfect match for your personal taste.",
     blog: "fashion",
   },
   {
@@ -90,12 +90,12 @@ const blogData = [
     img: blog_5,
     date: "18 March, 2023",
     author:'John Smith',
-    title: "Fast fashion: How clothes are linked to climate change",
+    title: "How to Care for Your Diamond Jewelry",
     tags: ["Fashion", "Lift Style","News"],
     category:'fashion',
     comments:3,
     sm_desc:
-      "The world is an amazing place providing an incredible assortment of interesting locations across.",
+      "Keep your diamond jewelry looking its best with these essential care tips. From cleaning and storage to regular maintenance, learn how to preserve the beauty and brilliance of your diamonds.",
     blog: "fashion",
   },
   {
@@ -103,12 +103,12 @@ const blogData = [
     img: blog_6,
     date: "15 February, 2023",
     author:'John Smith',
-    title: "The Sound Of Fashion: Malcolm McLaren Words",
+    title: "Ethical Diamonds: What You Need to Know About Conflict-Free Gems",
     tags: ["Fashion", "Lift Style","News"],
     category:'fashion',
     comments:8,
     sm_desc:
-      "The world is an amazing place providing an incredible assortment of interesting locations across.",
+      "Understand the importance of ethical sourcing in the diamond industry. Learn how to identify conflict-free diamonds and the steps taken by reputable jewelers to ensure their diamonds are ethically sourced.",
     blog: "fashion",
   },
   //postbox blog
@@ -120,8 +120,8 @@ const blogData = [
     comments:2,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'How to Clean Your Home Faster and More Efficiently',
-    desc:'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat',
+    title:'The Evolution of Diamond Engagement Rings',
+    desc:'Trace the history and evolution of diamond engagement rings. From ancient times to modern-day trends, discover how styles and traditions have changed over the centuries',
     blog:'blog-postbox'
   },
   {
@@ -132,8 +132,8 @@ const blogData = [
     comments:5,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Four Ways a Clean Workplace Makes Employees Happy and Healthy',
-    desc:'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat',
+    title:'Customizing Your Diamond Jewelry: Tips and Ideas',
+    desc:'Get inspired to create a unique piece of diamond jewelry with these customization tips. Whether its an engagement ring, pendant, or earrings, learn how to add personal touches to your diamond piece',
     video:true,
     video_id:'457mlqV1gzA',
     blog:'blog-postbox'
@@ -145,8 +145,8 @@ const blogData = [
     comments:8,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Only one thing is impossible for God: To find any sense in any copyright law on the planet.',
-    desc:'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat',
+    title:'Diamond Alternatives: Moissanite, Lab-Grown Diamonds, and More.',
+    desc:'Explore the world of diamond alternatives, including moissanite, lab-grown diamonds, and other gemstones. Understand their differences and why they might be a great choice for your next piece of jewelry',
     blockquote:true,
     blog:'blog-postbox'
   },
@@ -157,8 +157,8 @@ const blogData = [
     comments:10,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Time for Spring Cleaning? Use These Tips From the Professionals',
-    desc:'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat',
+    title:'Famous Diamonds and Their Stories',
+    desc:'Delve into the fascinating stories behind some of the worlds most famous diamonds. From the Hope Diamond to the Cullinan Diamond, learn about their history, significance, and current whereabouts',
     audio:true,
     audio_id:'https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/316547873&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true',
     blog:'blog-postbox'
@@ -172,8 +172,8 @@ const blogData = [
     comments:12,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Time for Spring Cleaning? Use These Tips From the Professionals',
-    desc:'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat',
+    title:'Choosing the Perfect Diamond for Your Budget',
+    desc:'Find out how to select a beautiful diamond that fits your budget. Learn about the factors that influence diamond prices and discover strategies for getting the best value for your money.',
     blog:'blog-postbox'
   },
   // blog grid data 
@@ -186,8 +186,8 @@ const blogData = [
     comments:5,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Hiring the Right Sales Team at the Right Time',
-    desc:'Cursus mattis sociis natoque penatibus et magnis montes,nascetur ridiculus.',
+    title:'The Art of Diamond Setting: Enhancing Beauty and Brilliance',
+    desc:'Explore the various diamond setting styles and how they impact the overall look of a piece of jewelry. From prong and bezel to pavé and channel settings, understand the benefits and aesthetics of each option.',
     blog:'blog-grid'
   },
   {
@@ -199,8 +199,8 @@ const blogData = [
     comments:0,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Fully Embrace the Return of 90s fashion',
-    desc:'Cursus mattis sociis natoque penatibus et magnis montes,nascetur ridiculus.',
+    title:'Top Trends in Diamond Jewelry for 2024',
+    desc:'Stay ahead of the curve with the latest trends in diamond jewelry. Discover the hottest styles, designs, and innovations that are set to dominate the diamond market this year.',
     blog:'blog-grid'
   },
   {
@@ -212,8 +212,8 @@ const blogData = [
     comments:12,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Exploring the English Countryside',
-    desc:'Cursus mattis sociis natoque penatibus et magnis montes,nascetur ridiculus.',
+    title:'How to Spot a Fake Diamond: Tips for Buyers',
+    desc:'Arm yourself with knowledge to distinguish between real and fake diamonds. Learn about common imitation techniques and the tests you can perform to verify the authenticity of a diamond.',
     blog:'blog-grid'
   },
   {
@@ -225,8 +225,8 @@ const blogData = [
     comments:8,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Here’s the First Valentino’s New Makeup Collection',
-    desc:'Cursus mattis sociis natoque penatibus et magnis montes,nascetur ridiculus.',
+    title:'Diamond Engagement Rings: Finding the Perfect Symbol of Love',
+    desc:'Embark on the journey to find the perfect diamond engagement ring. Get expert advice on choosing the right ring that symbolizes your love and commitment, making your proposal unforgettable.',
     blog:'blog-grid'
   },
   {
@@ -238,8 +238,8 @@ const blogData = [
     comments:4,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Follow Your own Design process, whatever gets',
-    desc:'Cursus mattis sociis natoque penatibus et magnis montes,nascetur ridiculus.',
+    title:'The Environmental Impact of Diamond Mining',
+    desc:'Understand the environmental challenges associated with diamond mining. Learn about sustainable practices and how the industry is evolving to reduce its ecological footprint.',
     blog:'blog-grid'
   },
   {
@@ -251,8 +251,8 @@ const blogData = [
     comments:6,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Freelancer Days 2022, What’s new?',
-    desc:'Cursus mattis sociis natoque penatibus et magnis montes,nascetur ridiculus.',
+    title:'Diamonds in Pop Culture: Iconic Moments and Jewelry',
+    desc:'Explore how diamonds have been featured in movies, music, and fashion. From Marilyn Monroe’s "Diamonds Are a Girl’s Best Friend" to the iconic jewels worn by Hollywood stars, discover diamonds’ place in pop culture.',
     blog:'blog-grid'
   },
   {
@@ -264,8 +264,8 @@ const blogData = [
     comments:6,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Hiring the Right Sales Team at the Right Time',
-    desc:'Cursus mattis sociis natoque penatibus et magnis montes,nascetur ridiculus.',
+    title:'Diamond Jewelry for Special Occasions: Making Memories Last',
+    desc:'Find the perfect diamond jewelry for special occasions, from weddings and anniversaries to birthdays and graduations. Learn how to choose pieces that will become cherished keepsakes.',
     blog:'blog-grid'
   },
   {
@@ -277,8 +277,8 @@ const blogData = [
     comments:15,
     tags: ["Fashion", "Lift Style","News"],
     category:'Beauty',
-    title:'Quality Foods Requirments For Every Human Body’s',
-    desc:'Cursus mattis sociis natoque penatibus et magnis montes,nascetur ridiculus.',
+    title:'The Science Behind Diamonds: From Formation to Facets',
+    desc:'Dive into the science of diamonds, from their formation deep within the Earth to the intricate facets that make them sparkle. Understand the geological processes and craftsmanship that bring diamonds to life.',
     blog:'blog-grid'
   },
 ];
