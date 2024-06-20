@@ -25,7 +25,7 @@ const FooterTwo = () => {
                     <div className="tp-footer-widget-content">
                       <div className="tp-footer-talk mb-20">
                         <span>Got Questions? Call us</span>
-                        <h4><a href="tel:670-413-90-762">+670 413 90 762</a></h4>
+                        <h4><a href="tel:84-982-938-931">0982938931</a></h4>
                       </div>
                       <div className="tp-footer-contact">
                         <div className="tp-footer-contact-item d-flex align-items-start">
@@ -35,7 +35,7 @@ const FooterTwo = () => {
                             </span>
                           </div>
                           <div className="tp-footer-contact-content">
-                            <p><a href="mailto:shofy@support.com">swe.hamedhasan@gmail.com</a></p>
+                            <p><a href="mailto:diamondshopify@support.com">nonalbrian95@gmail.com</a></p>
                           </div>
                         </div>
                         <div className="tp-footer-contact-item d-flex align-items-start">
@@ -45,7 +45,7 @@ const FooterTwo = () => {
                             </span>
                           </div>
                           <div className="tp-footer-contact-content">
-                            <p><a href="https://www.google.com/maps/place/Sleepy+Hollow+Rd,+Gouverneur,+NY+13642,+USA/@44.3304966,-75.4552367,17z/data=!3m1!4b1!4m6!3m5!1s0x4cccddac8972c5eb:0x56286024afff537a!8m2!3d44.3304928!4d-75.453048!16s%2Fg%2F1tdsjdj4" target="_blank">79 Sleepy Hollow St. <br /> Jamaica, New York 1432</a></p>
+                            <p><a href="https://www.google.com/maps/place/FPT+University+HCMC/@10.8411276,106.8073081,17z/data=!3m1!4b1!4m6!3m5!1s0x31752731176b07b1:0xb752b24b379bae5e!8m2!3d10.8411276!4d106.809883!16s%2Fg%2F11j2zx_fz_?entry=ttu" target="_blank">Ho Chi Minh City<br /> FPT University</a></p>
                           </div>
                         </div>
                       </div>

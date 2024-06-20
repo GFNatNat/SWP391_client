@@ -111,7 +111,7 @@ const Header = () => {
                       <div className="tp-header-contact-content">
                         <h5>Hotline:</h5>
                         <p>
-                          <a href="tel:966-595-035-008">+(966) 595 035 008</a>
+                          <a href="tel:84-982-938-931">+(84) 982 938 931</a>
                         </p>
                       </div>
                     </div>
