@@ -38,7 +38,7 @@ const ContactArea = () => {
                         <a href="mailto:contact@shofy.com">contact@shofy.com</a>
                       </p>
                       <p data-info="phone">
-                        <a href="tel:670-413-90-762">+670 413 90 762</a>
+                        <a href="tel:84-982-938-931">0982938931</a>
                       </p>
                     </div>
                   </div>
@@ -51,10 +51,10 @@ const ContactArea = () => {
                     <div className="tp-contact-info-content">
                       <p>
                         <a
-                          href="https://www.google.com/maps/place/New+York,+NY,+USA/@40.6976637,-74.1197638,11z/data=!3m1!4b1!4m6!3m5!1s0x89c24fa5d33f083b:0xc80b8f06e177fe62!8m2!3d40.7127753!4d-74.0059728!16zL20vMDJfMjg2"
+                          href="https://www.google.com/maps/place/FPT+University+HCMC/@10.8411276,106.8073081,17z/data=!3m1!4b1!4m6!3m5!1s0x31752731176b07b1:0xb752b24b379bae5e!8m2!3d10.8411276!4d106.809883!16s%2Fg%2F11j2zx_fz_?entry=ttu"
                           target="_blank"
                         >
-                          84 sleepy hollow st. <br /> jamaica, New York 1432
+                          Ho Chi Minh City <br /> FPT University
                         </a>
                       </p>
                     </div>
