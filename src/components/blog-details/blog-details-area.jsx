@@ -54,7 +54,7 @@ const BlogDetailsArea = ({blog}) => {
                       <Image className="tp-postbox-details-quote-shape-2" src={shape_line_2} alt="shape" />
                     </div>
                     <p>There is a way out of every box, a solution to every puzzle its just a matter of finding it.</p>
-                    <cite>Shahnewaz Sakil</cite>
+                    <cite>Luu Bao</cite>
                   </blockquote>
                 </div>
 

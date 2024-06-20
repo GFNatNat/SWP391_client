@@ -50,7 +50,7 @@ const BlogDetailsAreaTwo = ({blog}) => {
             <div className="col-xl-8 col-lg-8 col-md-10">
               <div className="tp-postbox-details-main-wrapper tp-postbox-style2">
                 <div className="tp-postbox-details-content">
-                  <p className="tp-dropcap">sales process is critically important to the success of your reps and your business. If you have never seen a really skilled salesperson work, it seems almost effortless. They ask great questions, craftt perfect proposal, answer questions, address concerns and seamlessly seal the Underneath the surface of all of that, the salesperson has probably dedicated hours honing their craft and ensuring the process moves smoothly.</p>
+                  <p className="tp-dropcap">sales process is critically important to the success of your reps and your business. If you have never seen a really skilled salesperson work, it seems almost effortless. They ask great questions, craft perfect proposal, answer questions, address concerns and seamlessly seal the Underneath the surface of all of that, the salesperson has probably dedicated hours honing their craft and ensuring the process moves smoothly.</p>
 
                   <p>One of the challenges that often surfaces when  working with a remote sales team is a lack of transparency over what is happening, and where in the process things are taking place. We’re going to peel back the curtain and show you how to create the best sales.</p>
 
@@ -70,7 +70,7 @@ const BlogDetailsAreaTwo = ({blog}) => {
                         <Image className="tp-postbox-details-quote-shape-2" src={shape_line_2} alt="shape" />
                       </div>
                       <p>There is a way out of every box, a solution to every puzzle its just a matter of finding it.</p>
-                      <cite>Shahnewaz Sakil</cite>
+                      <cite>Luu Bao</cite>
                     </blockquote>
                   </div>
 
