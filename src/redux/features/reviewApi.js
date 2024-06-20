@@ -5,7 +5,7 @@ export const reviewApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     addReview: builder.mutation({
       query: (data) => ({
-        url: "https://swp391serversided-git-main-gfnatnats-projects.vercel.app/api/review/add",
+        url: "http://localhost:7000/api/review/add",
         method: "POST",
         body: data,
       }),

@@ -7,7 +7,7 @@ export const authApi = apiSlice.injectEndpoints({
     // createPaymentIntent
     createPaymentIntent: builder.mutation({
       query: (data) => ({
-        url: "https://swp391serversided-git-main-gfnatnats-projects.vercel.app/api/order/create-payment-intent",
+        url: "http://localhost:7000/api/order/create-payment-intent",
         method: "POST",
         body: data,
       }),
@@ -25,7 +25,7 @@ export const authApi = apiSlice.injectEndpoints({
     // saveOrder
     saveOrder: builder.mutation({
       query: (data) => ({
-        url: "https://swp391serversided-git-main-gfnatnats-projects.vercel.app/api/order/saveOrder",
+        url: "http://localhost:7000/api/order/saveOrder",
         method: "POST",
         body: data,
       }),
@@ -46,13 +46,13 @@ export const authApi = apiSlice.injectEndpoints({
     }),
     // getUserOrders
     getUserOrders: builder.query({
-      query: () => `https://swp391serversided-git-main-gfnatnats-projects.vercel.app/api/user-order`,
+      query: () => `http://localhost:7000/api/user-order`,
       providesTags:["UserOrders"],
       keepUnusedDataFor: 600,
     }),
     // getUserOrders
     getUserOrderById: builder.query({
-      query: (id) => `https://swp391serversided-git-main-gfnatnats-projects.vercel.app/api/user-order/${id}`,
+      query: (id) => `http://localhost:7000/api/user-order/${id}`,
       providesTags: (result, error, arg) => [{ type: "UserOrder", id: arg }],
       keepUnusedDataFor: 600,
     }),
