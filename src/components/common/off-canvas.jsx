@@ -9,7 +9,7 @@ import language_img from '@assets/img/icon/language-flag.png';
 import MobileCategory from '@/layout/headers/header-com/mobile-category';
 import MobileMenus from './mobile-menus';
 
-const OffCanvas = ({ isOffCanvasOpen, setIsCanvasOpen,categoryType = "electronics" }) => {
+const OffCanvas = ({ isOffCanvasOpen, setIsCanvasOpen, categoryType = "electronics" }) => {
   const [isCategoryActive, setIsCategoryActive] = useState(false);
   const [isCurrencyActive, setIsCurrencyActive] = useState(false);
   const [isLanguageActive, setIsLanguageActive] = useState(false);
@@ -78,9 +78,7 @@ const OffCanvas = ({ isOffCanvasOpen, setIsCanvasOpen,categoryType = "electronic
                 <span onClick={handleCurrencyActive} className="offcanvas__currency-selected-currency tp-currency-toggle" id="tp-offcanvas-currency-toggle">Currency : USD</span>
                 <ul className={`offcanvas__currency-list tp-currency-list ${isCurrencyActive ? 'tp-currency-list-open' : ''}`}>
                   <li>USD</li>
-                  <li>ERU</li>
-                  <li>BDT </li>
-                  <li>INR</li>
+                  <li>VND</li>
                 </ul>
               </div>
               <div className="offcanvas__select language">
@@ -91,10 +89,7 @@ const OffCanvas = ({ isOffCanvasOpen, setIsCanvasOpen,categoryType = "electronic
                   <div className="offcanvas__lang-wrapper">
                     <span onClick={handleLanguageActive} className="offcanvas__lang-selected-lang tp-lang-toggle" id="tp-offcanvas-lang-toggle">English</span>
                     <ul className={`offcanvas__lang-list tp-lang-list ${isLanguageActive ? 'tp-lang-list-open' : ''}`}>
-                      <li>Spanish</li>
-                      <li>Portugese</li>
-                      <li>American</li>
-                      <li>Canada</li>
+                      <li>Vietnamese</li>
                     </ul>
                   </div>
                 </div>
