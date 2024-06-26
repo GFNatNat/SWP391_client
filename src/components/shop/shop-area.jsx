@@ -4,8 +4,17 @@ import ProductItem from "../products/fashion/product-item";
 import CategoryFilter from "./shop-filter/category-filter";
 import ColorFilter from "./shop-filter/color-filter";
 import PriceFilter from "./shop-filter/price-filter";
+import CaratWeightFilter from "./shop-filter/carat-weight-filter";
 import ProductBrand from "./shop-filter/product-brand";
 import StatusFilter from "./shop-filter/status-filter";
+import MaterialFilter from "./shop-filter/material";
+import SizeFilter from "./shop-filter/size";
+import MainDiamondColor from "./shop-filter/color";
+import SideStoneFilter from "./shop-filter/side-stone";
+import OriginFilter from "./shop-filter/origin";
+import MainDiamondSizeFilter from "./shop-filter/main-diamond-size";
+import CutFilter from "./shop-filter/cut";
+import ClarityFilter from "./shop-filter/clarity";
 import TopRatedProducts from "./shop-filter/top-rated-products";
 import ShopListItem from "./shop-list-item";
 import ShopTopLeft from "./shop-top-left";
@@ -13,7 +22,14 @@ import ShopTopRight from "./shop-top-right";
 import ResetButton from "./shop-filter/reset-button";
 
 const ShopArea = ({ all_products, products, otherProps }) => {
-  const {priceFilterValues,selectHandleFilter,currPage,setCurrPage} = otherProps;
+  const {
+    priceFilterValues,
+    caratWeightFilterValues,
+    selectHandleFilter,
+    currPage,
+    setCurrPage,
+  } = otherProps;
+
   const [filteredRows, setFilteredRows] = useState(products);
   const [pageStart, setPageStart] = useState(0);
   const [countOfPage, setCountOfPage] = useState(12);
@@ -28,6 +44,13 @@ const ShopArea = ({ all_products, products, otherProps }) => {
   const maxPrice = all_products.reduce((max, product) => {
     return product.price > max ? product.price : max;
   }, 0);
+
+  // max caratWeight
+  const maxCaratWeight = all_products.reduce((max, product) => {
+    return 10;
+    //return product.caratWeight > max ? product.caratWeight : max;
+  }, 0);
+
   return (
     <>
       <section className="tp-shop-area pb-120">
@@ -40,6 +63,26 @@ const ShopArea = ({ all_products, products, otherProps }) => {
                   priceFilterValues={priceFilterValues}
                   maxPrice={maxPrice}
                 />
+                <CaratWeightFilter
+                  caratWeightFilterValues={caratWeightFilterValues}
+                  maxCaratWeight={maxCaratWeight}
+                />
+                {/* material */}
+                <MaterialFilter setCurrPage={setCurrPage} />
+                {/* size */}
+                <SizeFilter setCurrPage={setCurrPage} />
+                {/* mainDiamondColor */}
+                <MainDiamondColor setCurrPage={setCurrPage} />
+                {/* sideStoneFilter */}
+                <SideStoneFilter setCurrPage={setCurrPage} />
+                {/* originFilter */}
+                <OriginFilter setCurrPage={setCurrPage} />
+                {/* mainDiamondSizeFilter */}
+                <MainDiamondSizeFilter setCurrPage={setCurrPage} />
+                {/* cutFilter */}
+                <CutFilter setCurrPage={setCurrPage} />
+                {/* clarityFilter */}
+                <ClarityFilter setCurrPage={setCurrPage} />
                 {/* status */}
                 <StatusFilter setCurrPage={setCurrPage} />
                 {/* categories */}
@@ -51,7 +94,7 @@ const ShopArea = ({ all_products, products, otherProps }) => {
                 {/* brand */}
                 <ProductBrand setCurrPage={setCurrPage} />
                 {/* reset filter */}
-                <ResetButton/>
+                <ResetButton />
               </div>
             </div>
             <div className="col-xl-9 col-lg-8">

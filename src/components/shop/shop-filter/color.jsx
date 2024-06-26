@@ -3,57 +3,57 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { handleFilterSidebarClose } from "@/redux/features/shop-filter-slice";
 
-const StatusFilter = ({ setCurrPage, shop_right = false }) => {
+const ColorFilter = ({ setCurrPage, shop_right = false }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const statusOptions = ["On sale", "In stock"];
+  const colorOptions = ["D", "H", "N", "Z"];
 
-  // State to track selected status options
-  const [selectedStatus, setSelectedStatus] = useState([]);
+  // State to track selected color options
+  const [selectedColor, setSelectedColor] = useState([]);
 
-  // Effect to update selected status based on router query
+  // Effect to update selected color based on router query
   useEffect(() => {
-    if (router.query.status) {
-      const selected = Array.isArray(router.query.status)
-        ? router.query.status.map((c) =>
+    if (router.query.color) {
+      const selected = Array.isArray(router.query.color)
+        ? router.query.color.map((c) =>
             c.toLowerCase().replace("&", "").split(" ").join("-")
           )
         : [
-            router.query.status
+            router.query.color
               .toLowerCase()
               .replace("&", "")
               .split(" ")
               .join("-"),
           ];
-      setSelectedStatus(selected);
+      setSelectedColor(selected);
     } else {
-      setSelectedStatus([]);
+      setSelectedColor([]);
     }
-  }, [router.query.status]);
+  }, [router.query.color]);
 
   // Function to handle checkbox change
-  const handleCheckboxChange = (status) => {
-    const normalizedStatus = status
+  const handleCheckboxChange = (color) => {
+    const normalizedColor = color
       .toLowerCase()
       .replace("&", "")
       .split(" ")
       .join("-");
-    const isChecked = selectedStatus.includes(normalizedStatus);
+    const isChecked = selectedColor.includes(normalizedColor);
 
     // Toggle selection
-    let newSelectedStatus;
+    let newSelectedColor;
     if (isChecked) {
-      // Remove status if already checked
-      newSelectedStatus = selectedStatus.filter((c) => c !== normalizedStatus);
+      // Remove color if already checked
+      newSelectedColor = selectedColor.filter((c) => c !== normalizedColor);
     } else {
-      // Add status if unchecked
-      newSelectedStatus = [...selectedStatus, normalizedStatus];
+      // Add color if unchecked
+      newSelectedColor = [...selectedColor, normalizedColor];
     }
 
-    setSelectedStatus(newSelectedStatus);
+    setSelectedColor(newSelectedColor);
 
     // Build query parameters
-    const queryParams = newSelectedStatus.map((c) => `status=${c}`).join("&");
+    const queryParams = newSelectedColor.map((c) => `color=${c}`).join("&");
 
     // Construct URL based on shop or shop-right-sidebar
     router.push(
@@ -68,21 +68,21 @@ const StatusFilter = ({ setCurrPage, shop_right = false }) => {
 
   return (
     <div className="tp-shop-widget mb-50">
-      <h3 className="tp-shop-widget-title">Product Status</h3>
+      <h3 className="tp-shop-widget-title">Main Diamond Color</h3>
       <div className="tp-shop-widget-content">
         <div className="tp-shop-widget-checkbox">
           <ul className="filter-items filter-checkbox">
-            {statusOptions.map((status, index) => (
+            {colorOptions.map((color, index) => (
               <li key={index} className="filter-item checkbox">
                 <input
-                  id={status}
+                  id={color}
                   type="checkbox"
-                  checked={selectedStatus.includes(
-                    status.toLowerCase().replace("&", "").split(" ").join("-")
+                  checked={selectedColor.includes(
+                    color.toLowerCase().replace("&", "").split(" ").join("-")
                   )}
-                  onChange={() => handleCheckboxChange(status)}
+                  onChange={() => handleCheckboxChange(color)}
                 />
-                <label htmlFor={status}>{status}</label>
+                <label htmlFor={color}>{color}</label>
               </li>
             ))}
           </ul>
@@ -92,4 +92,4 @@ const StatusFilter = ({ setCurrPage, shop_right = false }) => {
   );
 };
 
-export default StatusFilter;
+export default ColorFilter;

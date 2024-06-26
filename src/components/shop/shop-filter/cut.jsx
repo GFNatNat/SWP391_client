@@ -3,57 +3,57 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { handleFilterSidebarClose } from "@/redux/features/shop-filter-slice";
 
-const StatusFilter = ({ setCurrPage, shop_right = false }) => {
+const CutFilter = ({ setCurrPage, shop_right = false }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const statusOptions = ["On sale", "In stock"];
+  const cutOptions = ["Poor", "Good", "Very Good", "Excellent"];
 
-  // State to track selected status options
-  const [selectedStatus, setSelectedStatus] = useState([]);
+  // State to track selected cut options
+  const [selectedCut, setSelectedCut] = useState([]);
 
-  // Effect to update selected status based on router query
+  // Effect to update selected cut based on router query
   useEffect(() => {
-    if (router.query.status) {
-      const selected = Array.isArray(router.query.status)
-        ? router.query.status.map((c) =>
+    if (router.query.cut) {
+      const selected = Array.isArray(router.query.cut)
+        ? router.query.cut.map((c) =>
             c.toLowerCase().replace("&", "").split(" ").join("-")
           )
         : [
-            router.query.status
+            router.query.cut
               .toLowerCase()
               .replace("&", "")
               .split(" ")
               .join("-"),
           ];
-      setSelectedStatus(selected);
+      setSelectedCut(selected);
     } else {
-      setSelectedStatus([]);
+      setSelectedCut([]);
     }
-  }, [router.query.status]);
+  }, [router.query.cut]);
 
   // Function to handle checkbox change
-  const handleCheckboxChange = (status) => {
-    const normalizedStatus = status
+  const handleCheckboxChange = (cut) => {
+    const normalizedCut = cut
       .toLowerCase()
       .replace("&", "")
       .split(" ")
       .join("-");
-    const isChecked = selectedStatus.includes(normalizedStatus);
+    const isChecked = selectedCut.includes(normalizedCut);
 
     // Toggle selection
-    let newSelectedStatus;
+    let newSelectedCut;
     if (isChecked) {
-      // Remove status if already checked
-      newSelectedStatus = selectedStatus.filter((c) => c !== normalizedStatus);
+      // Remove cut if already checked
+      newSelectedCut = selectedCut.filter((c) => c !== normalizedCut);
     } else {
-      // Add status if unchecked
-      newSelectedStatus = [...selectedStatus, normalizedStatus];
+      // Add cut if unchecked
+      newSelectedCut = [...selectedCut, normalizedCut];
     }
 
-    setSelectedStatus(newSelectedStatus);
+    setSelectedCut(newSelectedCut);
 
     // Build query parameters
-    const queryParams = newSelectedStatus.map((c) => `status=${c}`).join("&");
+    const queryParams = newSelectedCut.map((c) => `cut=${c}`).join("&");
 
     // Construct URL based on shop or shop-right-sidebar
     router.push(
@@ -68,21 +68,21 @@ const StatusFilter = ({ setCurrPage, shop_right = false }) => {
 
   return (
     <div className="tp-shop-widget mb-50">
-      <h3 className="tp-shop-widget-title">Product Status</h3>
+      <h3 className="tp-shop-widget-title">Cut</h3>
       <div className="tp-shop-widget-content">
         <div className="tp-shop-widget-checkbox">
           <ul className="filter-items filter-checkbox">
-            {statusOptions.map((status, index) => (
+            {cutOptions.map((cut, index) => (
               <li key={index} className="filter-item checkbox">
                 <input
-                  id={status}
+                  id={cut}
                   type="checkbox"
-                  checked={selectedStatus.includes(
-                    status.toLowerCase().replace("&", "").split(" ").join("-")
+                  checked={selectedCut.includes(
+                    cut.toLowerCase().replace("&", "").split(" ").join("-")
                   )}
-                  onChange={() => handleCheckboxChange(status)}
+                  onChange={() => handleCheckboxChange(cut)}
                 />
-                <label htmlFor={status}>{status}</label>
+                <label htmlFor={cut}>{cut}</label>
               </li>
             ))}
           </ul>
@@ -92,4 +92,4 @@ const StatusFilter = ({ setCurrPage, shop_right = false }) => {
   );
 };
 
-export default StatusFilter;
+export default CutFilter;

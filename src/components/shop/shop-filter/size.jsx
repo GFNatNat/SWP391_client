@@ -3,57 +3,57 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { handleFilterSidebarClose } from "@/redux/features/shop-filter-slice";
 
-const StatusFilter = ({ setCurrPage, shop_right = false }) => {
+const SizeFilter = ({ setCurrPage, shop_right = false }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const statusOptions = ["On sale", "In stock"];
+  const sizeOptions = ["10 mm", "12 mm", "14 mm", "16 mm"];
 
-  // State to track selected status options
-  const [selectedStatus, setSelectedStatus] = useState([]);
+  // State to track selected size options
+  const [selectedSize, setSelectedSize] = useState([]);
 
-  // Effect to update selected status based on router query
+  // Effect to update selected size based on router query
   useEffect(() => {
-    if (router.query.status) {
-      const selected = Array.isArray(router.query.status)
-        ? router.query.status.map((c) =>
+    if (router.query.size) {
+      const selected = Array.isArray(router.query.size)
+        ? router.query.size.map((c) =>
             c.toLowerCase().replace("&", "").split(" ").join("-")
           )
         : [
-            router.query.status
+            router.query.size
               .toLowerCase()
               .replace("&", "")
               .split(" ")
               .join("-"),
           ];
-      setSelectedStatus(selected);
+      setSelectedSize(selected);
     } else {
-      setSelectedStatus([]);
+      setSelectedSize([]);
     }
-  }, [router.query.status]);
+  }, [router.query.size]);
 
   // Function to handle checkbox change
-  const handleCheckboxChange = (status) => {
-    const normalizedStatus = status
+  const handleCheckboxChange = (size) => {
+    const normalizedSize = size
       .toLowerCase()
       .replace("&", "")
       .split(" ")
       .join("-");
-    const isChecked = selectedStatus.includes(normalizedStatus);
+    const isChecked = selectedSize.includes(normalizedSize);
 
     // Toggle selection
-    let newSelectedStatus;
+    let newSelectedSize;
     if (isChecked) {
-      // Remove status if already checked
-      newSelectedStatus = selectedStatus.filter((c) => c !== normalizedStatus);
+      // Remove size if already checked
+      newSelectedSize = selectedSize.filter((c) => c !== normalizedSize);
     } else {
-      // Add status if unchecked
-      newSelectedStatus = [...selectedStatus, normalizedStatus];
+      // Add size if unchecked
+      newSelectedSize = [...selectedSize, normalizedSize];
     }
 
-    setSelectedStatus(newSelectedStatus);
+    setSelectedSize(newSelectedSize);
 
     // Build query parameters
-    const queryParams = newSelectedStatus.map((c) => `status=${c}`).join("&");
+    const queryParams = newSelectedSize.map((c) => `size=${c}`).join("&");
 
     // Construct URL based on shop or shop-right-sidebar
     router.push(
@@ -68,21 +68,21 @@ const StatusFilter = ({ setCurrPage, shop_right = false }) => {
 
   return (
     <div className="tp-shop-widget mb-50">
-      <h3 className="tp-shop-widget-title">Product Status</h3>
+      <h3 className="tp-shop-widget-title">Product Size</h3>
       <div className="tp-shop-widget-content">
         <div className="tp-shop-widget-checkbox">
           <ul className="filter-items filter-checkbox">
-            {statusOptions.map((status, index) => (
+            {sizeOptions.map((size, index) => (
               <li key={index} className="filter-item checkbox">
                 <input
-                  id={status}
+                  id={size}
                   type="checkbox"
-                  checked={selectedStatus.includes(
-                    status.toLowerCase().replace("&", "").split(" ").join("-")
+                  checked={selectedSize.includes(
+                    size.toLowerCase().replace("&", "").split(" ").join("-")
                   )}
-                  onChange={() => handleCheckboxChange(status)}
+                  onChange={() => handleCheckboxChange(size)}
                 />
-                <label htmlFor={status}>{status}</label>
+                <label htmlFor={size}>{size}</label>
               </li>
             ))}
           </ul>
@@ -92,4 +92,4 @@ const StatusFilter = ({ setCurrPage, shop_right = false }) => {
   );
 };
 
-export default StatusFilter;
+export default SizeFilter;

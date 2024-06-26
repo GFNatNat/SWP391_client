@@ -13,128 +13,249 @@ import ShopLoader from "@/components/loader/shop/shop-loader";
 const ShopPage = ({ query }) => {
   const { data: products, isError, isLoading } = useGetAllProductsQuery();
   const [priceValue, setPriceValue] = useState([0, 0]);
+  const [caratWeightValue, setCaratWeightValue] = useState([0, 0]);
   const [selectValue, setSelectValue] = useState("");
   const [currPage, setCurrPage] = useState(1);
-  // Load the maximum price once the products have been loaded
+
   useEffect(() => {
     if (!isLoading && !isError && products?.data?.length > 0) {
       const maxPrice = products.data.reduce((max, product) => {
         return product.price > max ? product.price : max;
       }, 0);
       setPriceValue([0, maxPrice]);
+      const maxCaratWeight = products.data.reduce((max, product) => {
+        // Dummy logic to set a maximum carat weight
+        // You can replace this with actual logic if carat weight exists
+        return 10;
+      }, 0);
+      setCaratWeightValue([0, maxCaratWeight]);
     }
   }, [isLoading, isError, products]);
 
-  // handleChanges
   const handleChanges = (val) => {
     setCurrPage(1);
     setPriceValue(val);
   };
 
-  // selectHandleFilter
+  const handleCaratWeightChanges = (val) => {
+    setCurrPage(1);
+    setCaratWeightValue(val);
+  };
+
   const selectHandleFilter = (e) => {
     setSelectValue(e.value);
   };
 
-  // other props
   const otherProps = {
     priceFilterValues: {
       priceValue,
       handleChanges,
     },
+    caratWeightFilterValues: {
+      caratWeightValue,
+      handleCaratWeightChanges,
+    },
     selectHandleFilter,
     currPage,
     setCurrPage,
   };
-  // decide what to render
+
   let content = null;
 
   if (isLoading) {
-    content = <ShopLoader loading={isLoading}/>;
-  }
-  if (!isLoading && isError) {
-    content = <div className="pb-80 text-center"><ErrorMsg msg="There was an error" /></div>;
-  }
-  if (!isLoading && !isError && products?.data?.length === 0) {
+    content = <ShopLoader loading={isLoading} />;
+  } else if (isError) {
+    content = (
+      <div className="pb-80 text-center">
+        <ErrorMsg msg="There was an error" />
+      </div>
+    );
+  } else if (!isLoading && !isError && products?.data?.length === 0) {
     content = <ErrorMsg msg="No Products found!" />;
-  }
-  if (!isLoading && !isError && products?.data?.length > 0) {
-    // products
-    let product_items = products.data;
-    // select short filtering
+  } else if (!isLoading && !isError && products?.data?.length > 0) {
+    let productItems = products.data;
+
     if (selectValue) {
-      if (selectValue === "Default Sorting") {
-        product_items = products.data;
-      } else if (selectValue === "Low to High") {
-        product_items = products.data
-          .slice()
-          .sort((a, b) => Number(a.price) - Number(b.price));
-      } else if (selectValue === "High to Low") {
-        product_items = products.data
-          .slice()
-          .sort((a, b) => Number(b.price) - Number(a.price));
-      } else if (selectValue === "New Added") {
-        product_items = products.data
-          .slice()
-          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      } else if (selectValue === "On Sale") {
-        product_items = products.data.filter((p) => p.discount > 0);
-      } else {
-        product_items = products.data;
+      switch (selectValue) {
+        case "Low to High":
+          productItems = products.data
+            .slice()
+            .sort((a, b) => Number(a.price) - Number(b.price));
+          break;
+        case "High to Low":
+          productItems = products.data
+            .slice()
+            .sort((a, b) => Number(b.price) - Number(a.price));
+          break;
+        case "New Added":
+          productItems = products.data
+            .slice()
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+          break;
+        case "On Sale":
+          productItems = products.data.filter((p) => p.discount > 0);
+          break;
+        default:
+          productItems = products.data;
       }
     }
-    // price filter
-    product_items = product_items.filter(
+
+    //price filter
+    productItems = productItems.filter(
       (p) => p.price >= priceValue[0] && p.price <= priceValue[1]
     );
 
-    // status filter
+    // Carat Weight Filter
+    const caratWeightFilter = (products, caratWeightValue) => {
+      return products.filter((product) => {
+        let caratWeight = null;
+
+        // Check classificationAttributes for Carat Weight
+        if (product.classificationAttributes) {
+          const caratAttribute = product.classificationAttributes.find((attr) =>
+            attr.startsWith("Carat Weight|")
+          );
+          if (caratAttribute) {
+            const values = caratAttribute.split("|")[1].split(";");
+            caratWeight = values.map((value) =>
+              parseFloat(value.replace(" ct", ""))
+            );
+          }
+        }
+
+        // If not found in classificationAttributes, check additionalInformation
+        if (!caratWeight && product.additionalInformation) {
+          const caratInfo = product.additionalInformation.find(
+            (info) => info.key === "Carat Weight"
+          );
+          if (caratInfo) {
+            caratWeight = parseFloat(caratInfo.value.replace(" ct", ""));
+          }
+        }
+
+        // If caratWeight is an array, check if any value falls within the range
+        if (Array.isArray(caratWeight)) {
+          return caratWeight.some(
+            (weight) =>
+              weight >= caratWeightValue[0] && weight <= caratWeightValue[1]
+          );
+        }
+
+        // If caratWeight is a single value, check if it falls within the range
+        if (caratWeight !== null) {
+          return (
+            caratWeight >= caratWeightValue[0] &&
+            caratWeight <= caratWeightValue[1]
+          );
+        }
+
+        // If no Carat Weight found, leave it alone
+        return true;
+      });
+    };
+
+    // Apply the carat weight filter
+    productItems = caratWeightFilter(productItems, caratWeightValue);
+
+    //status filter
     if (query.status) {
       if (query.status === "on-sale") {
-        product_items = product_items.filter((p) => p.discount > 0);
+        productItems = productItems.filter((p) => p.discount > 0);
       } else if (query.status === "in-stock") {
-        product_items = product_items.filter((p) => p.status === "in-stock");
+        productItems = productItems.filter((p) => p.status === "in-stock");
       }
     }
 
-    // category filter
+    const filterProducts = (products, query) => {
+      return products.filter((product) => {
+        let matches = true;
+
+        // Helper function to extract attribute values
+        const getAttributeValue = (attributes, key) => {
+          const attr = attributes.find((attr) => attr.startsWith(`${key}|`));
+          if (attr) {
+            return attr
+              .split("|")[1]
+              .split(";")
+              .map((value) => value.trim());
+          }
+          return null;
+        };
+
+        // Check each query parameter
+        for (const [key, queryValues] of Object.entries(query)) {
+          let attributeValues = getAttributeValue(
+            product.classificationAttributes,
+            key
+          );
+
+          if (!attributeValues) {
+            const additionalInfo = product.additionalInformation.find(
+              (info) => info.key.toLowerCase().replace(/\s+/g, "-") === key
+            );
+            if (additionalInfo) {
+              attributeValues = [
+                additionalInfo.value.toLowerCase().replace(/\s+/g, "-"),
+              ];
+            }
+          }
+
+          if (attributeValues) {
+            const queryValueArray = Array.isArray(queryValues)
+              ? queryValues
+              : [queryValues];
+
+            matches =
+              matches &&
+              queryValueArray.some((queryValue) =>
+                attributeValues.includes(queryValue)
+              );
+          }
+
+          if (!matches) {
+            break;
+          }
+        }
+
+        return matches;
+      });
+    };
+
+    // Apply the filters
+    productItems = filterProducts(productItems, query);
+
     if (query.category) {
-      product_items = product_items.filter(
+      productItems = productItems.filter(
         (p) =>
           p.parent.toLowerCase().replace("&", "").split(" ").join("-") ===
           query.category
       );
     }
 
-    // category filter
     if (query.subCategory) {
-      product_items = product_items.filter(
+      productItems = productItems.filter(
         (p) =>
           p.children.toLowerCase().replace("&", "").split(" ").join("-") ===
           query.subCategory
       );
     }
 
-    // color filter
     if (query.color) {
-      product_items = product_items.filter((product) => {
-        for (let i = 0; i < product.imageURLs.length; i++) {
-          const color = product.imageURLs[i]?.color;
-          if (
-            color &&
-            color?.name.toLowerCase().replace("&", "").split(" ").join("-") ===
-              query.color
-          ) {
-            return true; // match found, include product in result
-          }
-        }
-        return false; // no match found, exclude product from result
+      productItems = productItems.filter((product) => {
+        return product.imageURLs.some(
+          (image) =>
+            image.color &&
+            image.color.name
+              .toLowerCase()
+              .replace("&", "")
+              .split(" ")
+              .join("-") === query.color
+        );
       });
     }
 
-    // brand filter
     if (query.brand) {
-      product_items = product_items.filter(
+      productItems = productItems.filter(
         (p) =>
           p.brand.name.toLowerCase().replace("&", "").split(" ").join("-") ===
           query.brand
@@ -145,7 +266,7 @@ const ShopPage = ({ query }) => {
       <>
         <ShopArea
           all_products={products.data}
-          products={product_items}
+          products={productItems}
           otherProps={otherProps}
         />
         <ShopFilterOffCanvas
@@ -155,6 +276,7 @@ const ShopPage = ({ query }) => {
       </>
     );
   }
+
   return (
     <Wrapper>
       <SEO pageTitle="Shop" />
@@ -170,7 +292,6 @@ export default ShopPage;
 
 export const getServerSideProps = async (context) => {
   const { query } = context;
-
   return {
     props: {
       query,
