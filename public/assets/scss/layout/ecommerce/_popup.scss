@@ -1,0 +1,72 @@
+// // _popup.scss
+
+// @use "../../utils" as *;
+
+// .popup {
+//   position: fixed;
+//   top: 50%;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+//   background-color: white;
+//   padding: 20px;
+//   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+//   z-index: 999;
+//   display: none; /* Initially hide the popup */
+// }
+
+// .popup.show {
+//   display: block; /* Show the popup when 'show' class is applied */
+// }
+
+// // Example using mixins and variables from imported module
+
+// .container {
+//   @include flex-center; // Assuming flex-center is defined in '../../utils'
+//   background-color: $primary-color; // Assuming $primary-color is defined in '../../utils'
+// }
+@use "../../utils" as *;
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  display: none; /* Initially hide the popup */
+  transition: opacity 0.3s ease-in-out; /* Smooth transition for visibility */
+
+  /* Ensure the popup is centered horizontally */
+  width: 80%; /* Adjust width as needed */
+  max-width: 600px; /* Adjust max-width as needed */
+
+  /* Customize additional styles */
+  &-content {
+    /* Additional styles for the content within the popup */
+    p {
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 8px 16px;
+      background-color: $primary-color; // Use the primary color defined in utils
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: darken(
+          $primary-color,
+          10%
+        ); // Darken the primary color on hover
+      }
+    }
+  }
+}
+
+.popup.show {
+  display: block; /* Show the popup when 'show' class is applied */
+  opacity: 1; /* Ensure the popup is fully visible */
+}

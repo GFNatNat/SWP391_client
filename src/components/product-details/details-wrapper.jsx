@@ -27,8 +27,16 @@ const DetailsWrapper = ({
     description,
     discount,
     price,
+    quantity,
+    lowestPrice,
+    highestPrice,
     status,
+    mainDiamond,
+    diamondShell,
+    sideStone,
+    processingFee,
     classificationAttributes,
+    productSpecifications,
     productVariants,
     reviews,
     tags,
@@ -36,8 +44,10 @@ const DetailsWrapper = ({
   } = productItem || {};
   const [ratingVal, setRatingVal] = useState(0);
   const [textMore, setTextMore] = useState(false);
-  const [selectedAttributes, setSelectedAttributes] = useState({});
   const [selectedVariant, setSelectedVariant] = useState(null);
+  const [selectedAttributes, setSelectedAttributes] = useState({});
+  const [selectedSpecifications, setSelectedSpecifications] = useState([]);
+  const [popupMessage, setPopupMessage] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -51,41 +61,117 @@ const DetailsWrapper = ({
     }
   }, [reviews]);
 
-  // Update filtered variants when selected attributes change
   useEffect(() => {
-    if (selectedAttributesComplete()) {
-      const variant = findVariantByAttributes(selectedAttributes);
-      setSelectedVariant(variant);
-    } else {
-      setSelectedVariant(null);
-    }
-  }, [selectedAttributes]);
+    // Pre-select the first attribute value for each attribute of each type
+    const initialSelectedAttributes = {};
+    classificationAttributes.forEach((typeObj) => {
+      const type = typeObj.type;
+      const attributes = typeObj.attributes;
+      initialSelectedAttributes[type] = {};
+      attributes.forEach((attribute) => {
+        initialSelectedAttributes[type][attribute.key] = attribute.value[0];
+      });
+    });
+    setSelectedAttributes(initialSelectedAttributes);
+  }, [classificationAttributes]);
 
-  const selectedAttributesComplete = () => {
-    return (
-      Object.keys(selectedAttributes).length === classificationAttributes.length
-    );
-  };
+  useEffect(() => {
+    // Normalize and replace spaces with hyphens
+    const normalize = (str) => str.toLowerCase().replace(/ /g, "-");
 
-  const findVariantByAttributes = (attributes) => {
-    return productVariants.find((variant) => {
-      const variantAttributes = variant.split(";");
-      for (let i = 0; i < classificationAttributes.length; i++) {
-        const [name, options] = classificationAttributes[i].split("|");
-        const selectedValue = attributes[name];
-        if (!selectedValue || !variantAttributes.includes(selectedValue)) {
-          return false;
+    // Check if each type in selectedAttributes has values for all its attributes
+    const updatedSpecifications = [];
+
+    for (const typeObj of classificationAttributes) {
+      const type = typeObj.type;
+      const attributes = typeObj.attributes;
+
+      // Check if selectedAttributes[type] exists and has values for all attributes of this type
+      if (
+        selectedAttributes[type] &&
+        attributes.every((attr) => selectedAttributes[type][attr.key])
+      ) {
+        // Find the specification object that matches the current type
+        const spec = productSpecifications.find((spec) => spec.type === type);
+        // Extract key-value pairs from selectedAttributes[type]
+        const selectedAttributesEntries = Object.entries(
+          selectedAttributes[type]
+        );
+        if (spec) {
+          // Filter sets that match all selected values
+          const sets = spec.sets.filter((set) =>
+            selectedAttributesEntries.every((attr) =>
+              set.set_values.some(
+                (value) =>
+                  normalize(value.key) === normalize(attr[0]) &&
+                  normalize(value.value) === normalize(attr[1])
+              )
+            )
+          );
+          if (sets.length > 0) {
+            updatedSpecifications.push({ type, sets });
+          } else {
+            console.log(`No sets found for type: ${type}`);
+            // Show popup when no sets found
+            const selectedValues = selectedAttributes[type];
+            const selectedValuesString = Object.keys(selectedValues)
+              .map((key) => `${key}: ${selectedValues[key]}`)
+              .join(", ");
+            const errorMessage = `set type: ${type} {${selectedValuesString}} chưa được define giá, vui lòng chọn set khác hoặc liên hệ admin hỗ trợ thêm giá.`;
+            setPopupMessage(errorMessage);
+          }
+        } else {
+          console.log(`No sets found for type: ${type}`);
+          const errorMessage = `set type: ${type} chưa được define giá, vui lòng chọn set khác hoặc liên hệ admin hỗ trợ thêm giá.`;
+          setPopupMessage(errorMessage);
         }
       }
-      return true;
+    }
+
+    setSelectedSpecifications(updatedSpecifications);
+  }, [selectedAttributes, productSpecifications]);
+
+  // Update selectedVariant based on selectedSpecifications
+  useEffect(() => {
+    console.log(selectedSpecifications);
+    const newSelectedVariant = findVariantBySpecifications(
+      selectedSpecifications
+    );
+    setSelectedVariant(newSelectedVariant);
+  }, [selectedSpecifications]);
+
+  // Function to handle attribute changes
+  const handleAttributeChange = (type, key, value) => {
+    setSelectedAttributes((prevAttributes) => ({
+      ...prevAttributes,
+      [type]: { ...prevAttributes[type], [key]: value },
+    }));
+  };
+
+  const findVariantBySpecifications = (specifications) => {
+    // Filter product variants based on selected specifications
+    return productVariants.find((variant) => {
+      return specifications.every((spec) => {
+        return variant.productVariantAttributes.some((attr) => {
+          return (
+            attr.type === spec.type &&
+            attr.set.set_values.every((setValue) => {
+              return spec.sets.some((set) => {
+                return set.set_values.some(
+                  (value) =>
+                    value.key === setValue.key && value.value === setValue.value
+                );
+              });
+            })
+          );
+        });
+      });
     });
   };
 
-  const handleAttributeChange = (attributeName, value) => {
-    setSelectedAttributes((prev) => ({
-      ...prev,
-      [attributeName]: value,
-    }));
+  // Function to close popup
+  const closePopup = () => {
+    setPopupMessage(null);
   };
 
   // handle add product
@@ -109,7 +195,6 @@ const DetailsWrapper = ({
         <span>{category.name}</span>
       </div>
       <h3 className="tp-product-details-title">{title}</h3>
-
       {/* inventory details */}
       <div className="tp-product-details-inventory d-flex align-items-center mb-10">
         <div className="tp-product-details-stock mb-10">
@@ -137,20 +222,30 @@ const DetailsWrapper = ({
           {textMore ? "See less" : "See more"}
         </span>
       </p>
-
       {/* price */}
       <div className="tp-product-details-price-wrapper mb-20">
-        {discount > 0 ? (
+        {selectedVariant ? (
           <>
-            <span className="tp-product-details-price old-price">${price}</span>
-            <span className="tp-product-details-price new-price">
-              {" "}
-              $
-              {(
-                Number(price) -
-                (Number(price) * Number(discount)) / 100
-              ).toFixed(2)}
-            </span>
+            {discount > 0 ? (
+              <>
+                <span className="tp-product-details-price old-price">
+                  ${selectedVariant.finalPrice}
+                </span>
+                <span className="tp-product-details-price new-price">
+                  {" "}
+                  $
+                  {(
+                    Number(selectedVariant.finalPrice) -
+                    (Number(selectedVariant.finalPrice) * Number(discount)) /
+                      100
+                  ).toFixed(2)}
+                </span>
+              </>
+            ) : (
+              <span className="tp-product-details-price new-price">
+                ${selectedVariant.finalPrice.toFixed(2)}
+              </span>
+            )}
           </>
         ) : (
           <span className="tp-product-details-price new-price">
@@ -158,43 +253,54 @@ const DetailsWrapper = ({
           </span>
         )}
       </div>
-
-      {/* classificationAttributes */}
-      {classificationAttributes.map((attribute, index) => {
-        const [name, values] = attribute.split("|");
-        const options = values.split(";");
-
-        return (
-          <div key={index}>
-            <h5>{name}</h5>
-            <div className="attribute-options">
-              {options.map((option, i) => (
-                <div key={i}>
-                  <input
-                    type="radio"
-                    id={`${name}-${option}`}
-                    name={name}
-                    value={option}
-                    checked={selectedAttributes[name] === option}
-                    onChange={() => handleAttributeChange(name, option)}
-                  />
-                  <label htmlFor={`${name}-${option}`}>{option}</label>
-                </div>
-              ))}
-            </div>
+      {/* Render classificationAttributes */}
+      {classificationAttributes.map((attributeGroup, index) => (
+        <div key={index}>
+          <h5>{attributeGroup.type}</h5>
+          <div className="attribute-options">
+            {attributeGroup.attributes.map((attribute) => (
+              <div key={`${attributeGroup.type}-${attribute.key}`}>
+                <h6>{attribute.key}</h6>
+                {attribute.value.map((value) => (
+                  <div key={`${attributeGroup.type}-${attribute.key}-${value}`}>
+                    <input
+                      type="radio"
+                      id={`${attributeGroup.type}-${attribute.key}-${value}`}
+                      name={`${attributeGroup.type}-${attribute.key}`}
+                      value={value}
+                      checked={
+                        selectedAttributes[attributeGroup.type]?.[
+                          attribute.key
+                        ] === value
+                      }
+                      onChange={() =>
+                        handleAttributeChange(
+                          attributeGroup.type,
+                          attribute.key,
+                          value
+                        )
+                      }
+                    />
+                    <label
+                      htmlFor={`${attributeGroup.type}-${attribute.key}-${value}`}
+                    >
+                      {value}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
-        );
-      })}
-
-      {/* Display selected variant details */}
-      {selectedVariant && (
-        <div className="tp-product-details-selected-variant">
-          <h5>Selected Variant:</h5>
-          <p>Price: ${selectedVariant.split(";")[5]}</p>
-          <p>Stock: {selectedVariant.split(";")[4]}</p>
         </div>
-      )}
-
+      ))}
+      {/* quantity*/}
+      <div className="tp-product-details-quantity mb-15 w-100">
+        {selectedVariant ? (
+          <span>Remain stock: {selectedVariant.quantity}</span>
+        ) : (
+          <span>Remain stock: {quantity}</span>
+        )}
+      </div>
       {/* variations */}
       {imageURLs.some((item) => item?.color && item?.color?.name) && (
         <div className="tp-product-details-variation">
@@ -225,13 +331,11 @@ const DetailsWrapper = ({
           </div>
         </div>
       )}
-
       {/* if ProductDetailsCountdown true start */}
       {offerDate?.endDate && (
         <ProductDetailsCountdown offerExpiryTime={offerDate?.endDate} />
       )}
       {/* if ProductDetailsCountdown true end */}
-
       {/* actions */}
       <div className="tp-product-details-action-wrapper">
         <h3 className="tp-product-details-action-title">Quantity</h3>
@@ -281,9 +385,56 @@ const DetailsWrapper = ({
         </button>
       </div>
       {/* product-details-action-sm end */}
-
       {detailsBottom && (
         <DetailsBottomInfo category={category?.name} sku={sku} tag={tags[0]} />
+      )}
+      {/* Example of how to render popup */}
+      {popupMessage && (
+        <div
+          className="popup"
+          style={{
+            position: "fixed",
+            top: "10%",
+            left: "0%",
+            backgroundColor:
+              "rgba(0, 0, 0, 0.5)" /* semi-transparent black background */,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
+          }}
+        >
+          <div
+            className="popup-content"
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "8px",
+              boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)" /* subtle shadow */,
+              textAlign: "center",
+              maxWidth: "80%" /* Adjust max-width as needed */,
+            }}
+          >
+            <p>{popupMessage}</p>
+            <button
+              style={{
+                backgroundColor: "#007bff" /* blue color */,
+                color: "white",
+                border: "none",
+                padding: "10px 20px",
+                marginTop: "10px",
+                borderRadius: "4px",
+                cursor: "pointer",
+                transition: "background-color 0.3s ease",
+              }}
+              onClick={closePopup}
+            >
+              Close
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
