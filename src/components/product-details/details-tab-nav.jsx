@@ -3,23 +3,32 @@ import ReviewForm from "../forms/review-form";
 import ReviewItem from "./review-item";
 
 const DetailsTabNav = ({ product }) => {
-  const { _id, description, additionalInformation, reviews } = product || {};
+  const {
+    _id,
+    description,
+    additionalInformation,
+    reviews,
+    mainDiamond,
+    sideStone,
+    diamondShell,
+  } = product || {};
   const activeRef = useRef(null);
   const marker = useRef(null);
-  // handleActive
+
   const handleActive = (e) => {
     if (e.target.classList.contains("active")) {
       marker.current.style.left = e.target.offsetLeft + "px";
       marker.current.style.width = e.target.offsetWidth + "px";
     }
   };
+
   useEffect(() => {
     if (activeRef.current?.classList.contains("active")) {
       marker.current.style.left = activeRef.current.offsetLeft + "px";
       marker.current.style.width = activeRef.current.offsetWidth + "px";
     }
   }, []);
-  // nav item
+
   function NavItem({ active = false, id, title, linkRef }) {
     return (
       <button
@@ -39,6 +48,49 @@ const DetailsTabNav = ({ product }) => {
       </button>
     );
   }
+
+  const convertToDisplayFormat = (key) => {
+    const specialKeys = {
+      sideStoneAmount: "side stone amount",
+      caratWeight: "carat weight",
+      sideStoneName: "side stone name",
+    };
+    return (
+      specialKeys[key] || key.replace(/([a-z])([A-Z])/g, "$1 $2").toLowerCase()
+    );
+  };
+
+  const prepareAdditionalInfo = () => {
+    const combinedInfo = [];
+
+    const addInfoItem = (key, value) => {
+      combinedInfo.push({ key, value });
+    };
+
+    const convertToId = (str) => str.toLowerCase().replace(/ /g, "-");
+
+    Object.entries(diamondShell || {}).forEach(([key, value]) => {
+      addInfoItem(key, value);
+    });
+    Object.entries(mainDiamond || {}).forEach(([key, value]) => {
+      addInfoItem(key, value);
+    });
+    Object.entries(sideStone || {}).forEach(([key, value]) => {
+      addInfoItem(key, value);
+    });
+
+    const existingKeys = combinedInfo.map((info) => convertToId(info.key));
+
+    (additionalInformation || []).forEach((item) => {
+      if (!existingKeys.includes(convertToId(item.key))) {
+        addInfoItem(item.key, item.value);
+      }
+    });
+
+    return combinedInfo;
+  };
+
+  const additionalInfo = prepareAdditionalInfo();
 
   return (
     <>
@@ -103,9 +155,9 @@ const DetailsTabNav = ({ product }) => {
                 <div className="col-xl-10">
                   <table>
                     <tbody>
-                      {additionalInformation?.map((item, i) => (
+                      {additionalInfo.map((item, i) => (
                         <tr key={i}>
-                          <td>{item.key}</td>
+                          <td>{convertToDisplayFormat(item.key)}</td>
                           <td>{item.value}</td>
                         </tr>
                       ))}

@@ -16,6 +16,7 @@ const ShopPage = ({ query }) => {
   const [caratWeightValue, setCaratWeightValue] = useState([0, 0]);
   const [selectValue, setSelectValue] = useState("");
   const [currPage, setCurrPage] = useState(1);
+  const [popupMessage, setPopupMessage] = useState(null);
 
   useEffect(() => {
     if (!isLoading && !isError && products?.data?.length > 0) {
@@ -23,11 +24,9 @@ const ShopPage = ({ query }) => {
         return product.price > max ? product.price : max;
       }, 0);
       setPriceValue([0, maxPrice]);
-      const maxCaratWeight = products.data.reduce((max, product) => {
-        // Dummy logic to set a maximum carat weight
-        // You can replace this with actual logic if carat weight exists
-        return 10;
-      }, 0);
+
+      // Set maximum carat weight to a dummy value (replace with actual logic)
+      const maxCaratWeight = 10;
       setCaratWeightValue([0, maxCaratWeight]);
     }
   }, [isLoading, isError, products]);
@@ -100,7 +99,7 @@ const ShopPage = ({ query }) => {
       }
     }
 
-    //price filter
+    // Price filter
     productItems = productItems.filter(
       (p) => p.price >= priceValue[0] && p.price <= priceValue[1]
     );
@@ -112,25 +111,33 @@ const ShopPage = ({ query }) => {
 
         // Check classificationAttributes for Carat Weight
         if (product.classificationAttributes) {
-          const caratAttribute = product.classificationAttributes.find((attr) =>
-            attr.startsWith("Carat Weight|")
+          const mainDiamondAttributes = product.classificationAttributes.find(
+            (attr) =>
+              attr.type.toLowerCase().replace(/\s+/g, "-") === "main-diamond"
           );
-          if (caratAttribute) {
-            const values = caratAttribute.split("|")[1].split(";");
-            caratWeight = values.map((value) =>
-              parseFloat(value.replace(" ct", ""))
+          if (mainDiamondAttributes) {
+            const caratAttribute = mainDiamondAttributes.attributes.find(
+              (attribute) =>
+                attribute.key.toLowerCase().replace(/\s+/g, "-") ===
+                "carat-weight"
             );
+            if (caratAttribute) {
+              caratWeight = caratAttribute.value.map((value) =>
+                parseFloat(value.replace(" ct", ""))
+              );
+            }
           }
         }
 
-        // If not found in classificationAttributes, check additionalInformation
-        if (!caratWeight && product.additionalInformation) {
-          const caratInfo = product.additionalInformation.find(
-            (info) => info.key === "Carat Weight"
+        // Check mainDiamond for Carat Weight if not found in classificationAttributes
+        if (
+          !caratWeight &&
+          product.mainDiamond &&
+          product.mainDiamond.caratWeight
+        ) {
+          caratWeight = parseFloat(
+            product.mainDiamond.caratWeight.replace(" ct", "")
           );
-          if (caratInfo) {
-            caratWeight = parseFloat(caratInfo.value.replace(" ct", ""));
-          }
         }
 
         // If caratWeight is an array, check if any value falls within the range
@@ -149,7 +156,8 @@ const ShopPage = ({ query }) => {
           );
         }
 
-        // If no Carat Weight found, leave it alone
+        // If no Carat Weight found, show the popup message
+        setPopupMessage("No Carat Weight found for the selected product.");
         return true;
       });
     };
@@ -157,7 +165,7 @@ const ShopPage = ({ query }) => {
     // Apply the carat weight filter
     productItems = caratWeightFilter(productItems, caratWeightValue);
 
-    //status filter
+    // Status filter
     if (query.status) {
       if (query.status === "on-sale") {
         productItems = productItems.filter((p) => p.discount > 0);
@@ -277,12 +285,62 @@ const ShopPage = ({ query }) => {
     );
   }
 
+  const closePopup = () => {
+    setPopupMessage(null);
+  };
+
   return (
     <Wrapper>
       <SEO pageTitle="Shop" />
       <HeaderTwo style_2={true} />
       <ShopBreadcrumb title="Shop Grid" subtitle="Shop Grid" />
       {content}
+      {popupMessage && (
+        <div
+          className="popup"
+          style={{
+            position: "fixed",
+            top: "10%",
+            left: "0%",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
+          }}
+        >
+          <div
+            className="popup-content"
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "8px",
+              boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+              textAlign: "center",
+              maxWidth: "80%",
+            }}
+          >
+            <p>{popupMessage}</p>
+            <button
+              style={{
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+                padding: "10px 20px",
+                marginTop: "10px",
+                borderRadius: "4px",
+                cursor: "pointer",
+                transition: "background-color 0.3s ease",
+              }}
+              onClick={closePopup}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
       <Footer primary_style={true} />
     </Wrapper>
   );

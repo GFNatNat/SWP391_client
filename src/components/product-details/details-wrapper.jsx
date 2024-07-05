@@ -175,8 +175,9 @@ const DetailsWrapper = ({
   };
 
   // handle add product
-  const handleAddProduct = (prd) => {
-    dispatch(add_cart_product(prd));
+  const handleAddProduct = (prd, variant) => {
+    const productToAdd = variant ? { ...prd, selectedVariant: variant } : prd;
+    dispatch(add_cart_product(productToAdd));
   };
 
   // handle wishlist product
@@ -345,7 +346,7 @@ const DetailsWrapper = ({
           {/* product quantity */}
           <div className="tp-product-details-add-to-cart mb-15 w-100">
             <button
-              onClick={() => handleAddProduct(productItem)}
+              onClick={() => handleAddProduct(productItem, selectedVariant)}
               disabled={status === "out-of-stock"}
               className="tp-product-details-add-to-cart-btn w-100"
             >

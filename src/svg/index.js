@@ -77,6 +77,8 @@ import EmailTwo from "./email-2";
 import PhoneThree from "./phone-3";
 import LocationTwo from "./location-2";
 import CloseTwo from "./close-2";
+import ArrowDown from "./arrow-down";
+import ArrowUp from "./arrow-up";
 
 export {
   ArrowNextTwo,
@@ -158,4 +160,6 @@ export {
   PrevArr,
   Email,
   Location,
+  ArrowDown,
+  ArrowUp,
 };

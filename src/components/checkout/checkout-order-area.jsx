@@ -1,26 +1,33 @@
 import { useState } from "react";
 import { CardElement } from "@stripe/react-stripe-js";
 import { useSelector } from "react-redux";
-// internal
 import useCartInfo from "@/hooks/use-cart-info";
 import ErrorMsg from "../common/error-msg";
+import { ArrowDown, ArrowUp } from "@/svg";
 
 const CheckoutOrderArea = ({ checkoutData }) => {
   const {
     handleShippingCost,
-    cartTotal = 0,
     stripe,
     isCheckoutSubmit,
-    clientSecret,
     register,
     errors,
     showCard,
     setShowCard,
     shippingCost,
-    discountAmount
+    discountAmount,
   } = checkoutData;
   const { cart_products } = useSelector((state) => state.cart);
-  const { total } = useCartInfo();
+  const { total, totalWithDiscount } = useCartInfo();
+  const [expandedProductId, setExpandedProductId] = useState(null);
+
+  const toggleExpand = (productId) => {
+    setExpandedProductId(expandedProductId === productId ? null : productId);
+  };
+
+  const cartTotal =
+    (totalWithDiscount || total) + shippingCost - discountAmount;
+
   return (
     <div className="tp-checkout-place white-bg">
       <h3 className="tp-checkout-place-title">Your Order</h3>
@@ -38,8 +45,60 @@ const CheckoutOrderArea = ({ checkoutData }) => {
             <li key={item._id} className="tp-order-info-list-desc">
               <p>
                 {item.title} <span> x {item.orderQuantity}</span>
+                <span
+                  onClick={() => toggleExpand(item._id)}
+                  className="tp-cart-expand"
+                >
+                  {expandedProductId === item._id ? <ArrowUp /> : <ArrowDown />}
+                </span>
               </p>
-              <span>${item.price.toFixed(2)}</span>
+              <span>
+                {item.selectedVariant ? (
+                  item.discount > 0 ? (
+                    <>
+                      <span className="tp-product-details-price old-price">
+                        ${item.selectedVariant.finalPrice}
+                      </span>
+                      <span className="tp-product-details-price new-price">
+                        $
+                        {(
+                          Number(item.selectedVariant.finalPrice) -
+                          (Number(item.selectedVariant.finalPrice) *
+                            Number(item.discount)) /
+                            100
+                        ).toFixed(2)}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="tp-product-details-price new-price">
+                      ${item.selectedVariant.finalPrice.toFixed(2)}
+                    </span>
+                  )
+                ) : (
+                  <span className="tp-product-details-price new-price">
+                    ${item.price.toFixed(2)}
+                  </span>
+                )}
+              </span>
+              {expandedProductId === item._id && item.selectedVariant && (
+                <div className="tp-cart-variant-details">
+                  <div className="tp-cart-variant-info">
+                    <p>Selected Variant Details:</p>
+                    <ul>
+                      {item.selectedVariant.productVariantAttributes.map(
+                        (attr, index) => (
+                          <li key={index}>
+                            {attr.type}:{" "}
+                            {attr.set.set_values
+                              .map((value) => `${value.key}: ${value.value}`)
+                              .join(", ")}
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  </div>
+                </div>
+              )}
             </li>
           ))}
 
@@ -84,20 +143,20 @@ const CheckoutOrderArea = ({ checkoutData }) => {
             </div>
           </li>
 
-           {/*  subtotal */}
-           <li className="tp-order-info-list-subtotal">
+          {/*  subtotal */}
+          <li className="tp-order-info-list-subtotal">
             <span>Subtotal</span>
-            <span>${total.toFixed(2)}</span>
+            <span>${(totalWithDiscount || total).toFixed(2)}</span>
           </li>
 
-           {/*  shipping cost */}
-           <li className="tp-order-info-list-subtotal">
+          {/*  shipping cost */}
+          <li className="tp-order-info-list-subtotal">
             <span>Shipping Cost</span>
             <span>${shippingCost.toFixed(2)}</span>
           </li>
 
-           {/* discount */}
-           <li className="tp-order-info-list-subtotal">
+          {/* discount */}
+          <li className="tp-order-info-list-subtotal">
             <span>Discount</span>
             <span>${discountAmount.toFixed(2)}</span>
           </li>
@@ -105,7 +164,7 @@ const CheckoutOrderArea = ({ checkoutData }) => {
           {/* total */}
           <li className="tp-order-info-list-total">
             <span>Total</span>
-            <span>${parseFloat(cartTotal).toFixed(2)}</span>
+            <span>${cartTotal.toFixed(2)}</span>
           </li>
         </ul>
       </div>
@@ -120,7 +179,11 @@ const CheckoutOrderArea = ({ checkoutData }) => {
             name="payment"
             value="Card"
           />
-          <label onClick={() => setShowCard(true)} htmlFor="back_transfer" data-bs-toggle="direct-bank-transfer">
+          <label
+            onClick={() => setShowCard(true)}
+            htmlFor="back_transfer"
+            data-bs-toggle="direct-bank-transfer"
+          >
             Credit Card
           </label>
           {showCard && (
