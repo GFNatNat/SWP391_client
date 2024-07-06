@@ -180,22 +180,76 @@ const ShopPage = ({ query }) => {
 
         // Helper function to extract attribute values
         const getAttributeValue = (attributes, key) => {
-          const attr = attributes.find((attr) => attr.startsWith(`${key}|`));
+          const attr = attributes.find((attr) => attr.key === key);
           if (attr) {
-            return attr
-              .split("|")[1]
-              .split(";")
-              .map((value) => value.trim());
+            return attr.value.map((value) => value.trim().toLowerCase());
           }
           return null;
         };
 
+        // Collect all attribute values from classificationAttributes, mainDiamond, diamondShell, and sideStone
+        const collectAttributes = (product) => {
+          let attributes = [];
+
+          // From classificationAttributes
+          if (product.classificationAttributes) {
+            product.classificationAttributes.forEach((classification) => {
+              classification.attributes.forEach((attr) => {
+                attributes.push({
+                  key: attr.key.toLowerCase().replace(/\s+/g, "-"),
+                  value: attr.value,
+                });
+              });
+            });
+          }
+
+          // From mainDiamond
+          if (product.mainDiamond) {
+            Object.keys(product.mainDiamond).forEach((key) => {
+              attributes.push({
+                key: key.toLowerCase().replace(/\s+/g, "-"),
+                value: [
+                  product.mainDiamond[key].toLowerCase().replace(/\s+/g, "-"),
+                ],
+              });
+            });
+          }
+
+          // From diamondShell
+          if (product.diamondShell) {
+            Object.keys(product.diamondShell).forEach((key) => {
+              attributes.push({
+                key: key.toLowerCase().replace(/\s+/g, "-"),
+                value: [
+                  product.diamondShell[key].toLowerCase().replace(/\s+/g, "-"),
+                ],
+              });
+            });
+          }
+
+          // From sideStone
+          if (product.sideStone) {
+            Object.keys(product.sideStone).forEach((key) => {
+              attributes.push({
+                key: key.toLowerCase().replace(/\s+/g, "-"),
+                value: [
+                  product.sideStone[key]
+                    .toString()
+                    .toLowerCase()
+                    .replace(/\s+/g, "-"),
+                ],
+              });
+            });
+          }
+
+          return attributes;
+        };
+
+        const productAttributes = collectAttributes(product);
+
         // Check each query parameter
         for (const [key, queryValues] of Object.entries(query)) {
-          let attributeValues = getAttributeValue(
-            product.classificationAttributes,
-            key
-          );
+          let attributeValues = getAttributeValue(productAttributes, key);
 
           if (!attributeValues) {
             const additionalInfo = product.additionalInformation.find(
@@ -216,7 +270,9 @@ const ShopPage = ({ query }) => {
             matches =
               matches &&
               queryValueArray.some((queryValue) =>
-                attributeValues.includes(queryValue)
+                attributeValues.includes(
+                  queryValue.toLowerCase().replace(/\s+/g, "-")
+                )
               );
           }
 
