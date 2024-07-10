@@ -12,7 +12,6 @@ import SizeFilter from "./shop-filter/size";
 import MainDiamondColor from "./shop-filter/color";
 import SideStoneFilter from "./shop-filter/side-stone";
 import OriginFilter from "./shop-filter/origin";
-import MainDiamondSizeFilter from "./shop-filter/main-diamond-size";
 import CutFilter from "./shop-filter/cut";
 import ClarityFilter from "./shop-filter/clarity";
 import TopRatedProducts from "./shop-filter/top-rated-products";
@@ -77,8 +76,6 @@ const ShopArea = ({ all_products, products, otherProps }) => {
                 <SideStoneFilter setCurrPage={setCurrPage} />
                 {/* originFilter */}
                 <OriginFilter setCurrPage={setCurrPage} />
-                {/* mainDiamondSizeFilter */}
-                <MainDiamondSizeFilter setCurrPage={setCurrPage} />
                 {/* cutFilter */}
                 <CutFilter setCurrPage={setCurrPage} />
                 {/* clarityFilter */}
@@ -87,8 +84,6 @@ const ShopArea = ({ all_products, products, otherProps }) => {
                 <StatusFilter setCurrPage={setCurrPage} />
                 {/* categories */}
                 <CategoryFilter setCurrPage={setCurrPage} />
-                {/* color */}
-                <ColorFilter setCurrPage={setCurrPage} />
                 {/* product rating */}
                 <TopRatedProducts />
                 {/* brand */}

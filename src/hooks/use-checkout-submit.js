@@ -5,6 +5,7 @@ import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import { v4 as uuidv4 } from "uuid";
 // Internal imports
 import useCartInfo from "./use-cart-info";
 import { set_shipping } from "@/redux/features/order/orderSlice";
@@ -185,10 +186,51 @@ const useCheckoutSubmit = () => {
     setValue("orderNote", shipping_info.orderNote);
   }, [user, setValue, shipping_info, router]);
 
+  // Function to generate an array of warranty IDs
+  const generateWarrantyIds = (quantity) => {
+    const warrantyIds = [];
+    for (let i = 0; i < quantity; i++) {
+      warrantyIds.push(uuidv4());
+    }
+    return warrantyIds;
+  };
+
+  // Generate warranty information
+  const generateWarrantyInformation = (orderInfo, item, warrantyId) => {
+    const dateOfPurchase = dayjs().format("DD/MM/YYYY");
+    const warrantyPeriod = item.selectedVariant
+      ? item.selectedVariant.variantWarrantyPeriod
+      : item.warrantyPeriod;
+    const warrantyEndDate = dayjs()
+      .add(warrantyPeriod, "day")
+      .format("DD/MM/YYYY");
+
+    return {
+      warrantyId,
+      customerName: orderInfo.name,
+      dateOfPurchase,
+      warrantyPeriod: `From ${dateOfPurchase} to ${warrantyEndDate}`,
+    };
+  };
+
+  // Generate product certificate information
+  const generateProductCertificateInformation = (warrantyId) => {
+    return {
+      certificateId: warrantyId,
+      certificateUrl: "The product hasn't been updated with a certificate yet",
+    };
+  };
+
   // Handle form submission
   const submitHandler = async (data) => {
     dispatch(set_shipping(data));
     setIsCheckoutSubmit(true);
+
+    // Generate warranty IDs for each product
+    const cartWithWarranties = cart_products.map((product) => ({
+      ...product,
+      warrantyIds: generateWarrantyIds(product.orderQuantity),
+    }));
 
     let orderInfo = {
       name: `${data.firstName} ${data.lastName}`,
@@ -199,8 +241,8 @@ const useCheckoutSubmit = () => {
       country: data.country,
       zipCode: data.zipCode,
       shippingOption: data.shippingOption,
-      status: "Pending",
-      cart: cart_products,
+      status: "new",
+      cart: cartWithWarranties,
       paymentMethod: data.payment,
       subTotal: totalWithDiscount || total,
       shippingCost: shippingCost,
@@ -209,6 +251,21 @@ const useCheckoutSubmit = () => {
       orderNote: data.orderNote,
       user: `${user?._id}`,
     };
+
+    // Add warranty and certificate information
+    cartWithWarranties.forEach((item) => {
+      item.warrantyIds.forEach((warrantyId) => {
+        item.warrantyInformation = item.warrantyInformation || [];
+        item.productCertificateInformation =
+          item.productCertificateInformation || [];
+        item.warrantyInformation.push(
+          generateWarrantyInformation(orderInfo, item, warrantyId)
+        );
+        item.productCertificateInformation.push(
+          generateProductCertificateInformation(warrantyId)
+        );
+      });
+    });
 
     if (data.payment === "Card") {
       if (!stripe || !elements) {
@@ -279,6 +336,29 @@ const useCheckoutSubmit = () => {
   };
 
   return {
+    handleSubmit,
+    submitHandler,
+    register,
+    errors,
+    handleCouponCode,
+    handleShippingCost,
+    couponRef,
+    cartTotal,
+    discountAmount,
+    discountPercentage,
+    couponApplyMsg,
+    isCheckoutSubmit,
+    cardError,
+    total: totalWithDiscount || total,
+    shippingCost,
+    discountProductType,
+    setTotal,
+    cardError,
+    stripe,
+    clientSecret,
+    setClientSecret,
+    showCard,
+    setShowCard,
     handleCouponCode,
     couponRef,
     handleShippingCost,
@@ -302,6 +382,16 @@ const useCheckoutSubmit = () => {
     couponApplyMsg,
     showCard,
     setShowCard,
+    handleCouponCode,
+    handleShippingCost,
+    submitHandler,
+    couponRef,
+    cartTotal,
+    discountAmount,
+    discountPercentage,
+    couponApplyMsg,
+    isCheckoutSubmit,
+    cardError,
   };
 };
 

@@ -165,15 +165,6 @@ const ShopPage = ({ query }) => {
     // Apply the carat weight filter
     productItems = caratWeightFilter(productItems, caratWeightValue);
 
-    // Status filter
-    if (query.status) {
-      if (query.status === "on-sale") {
-        productItems = productItems.filter((p) => p.discount > 0);
-      } else if (query.status === "in-stock") {
-        productItems = productItems.filter((p) => p.status === "in-stock");
-      }
-    }
-
     const filterProducts = (products, query) => {
       return products.filter((product) => {
         let matches = true;
@@ -182,7 +173,9 @@ const ShopPage = ({ query }) => {
         const getAttributeValue = (attributes, key) => {
           const attr = attributes.find((attr) => attr.key === key);
           if (attr) {
-            return attr.value.map((value) => value.trim().toLowerCase());
+            return attr.value.map((value) =>
+              value.trim().toLowerCase().replace(/\s+/g, "-")
+            );
           }
           return null;
         };
@@ -195,51 +188,87 @@ const ShopPage = ({ query }) => {
           if (product.classificationAttributes) {
             product.classificationAttributes.forEach((classification) => {
               classification.attributes.forEach((attr) => {
-                attributes.push({
-                  key: attr.key.toLowerCase().replace(/\s+/g, "-"),
-                  value: attr.value,
-                });
+                const key = attr.key.toLowerCase().replace(/\s+/g, "-");
+                const value = attr.value.map((value) =>
+                  value.trim().toLowerCase().replace(/\s+/g, "-")
+                );
+
+                const existingAttr = attributes.find((a) => a.key === key);
+                if (existingAttr) {
+                  existingAttr.value = [
+                    ...new Set([...existingAttr.value, ...value]),
+                  ];
+                } else {
+                  attributes.push({ key, value });
+                }
               });
             });
           }
 
+          // Helper function to add attributes from an object with specific keys
+          const addAttributesFromObject = (obj, prefix, keysMap) => {
+            Object.keys(obj).forEach((key) => {
+              if (obj[key] !== undefined && obj[key] !== null) {
+                const mappedKey =
+                  keysMap[key] ||
+                  `${prefix}-${key.toLowerCase().replace(/\s+/g, "-")}`;
+                const value = [
+                  obj[key].toString().toLowerCase().replace(/\s+/g, "-"),
+                ];
+
+                const existingAttr = attributes.find(
+                  (a) => a.key === mappedKey
+                );
+                if (existingAttr) {
+                  existingAttr.value = [
+                    ...new Set([...existingAttr.value, ...value]),
+                  ];
+                } else {
+                  attributes.push({ key: mappedKey, value });
+                }
+              }
+            });
+          };
+
           // From mainDiamond
           if (product.mainDiamond) {
-            Object.keys(product.mainDiamond).forEach((key) => {
-              attributes.push({
-                key: key.toLowerCase().replace(/\s+/g, "-"),
-                value: [
-                  product.mainDiamond[key].toLowerCase().replace(/\s+/g, "-"),
-                ],
-              });
-            });
+            const mainDiamondKeysMap = {
+              origin: "origin",
+              cut: "cut",
+              color: "color",
+              clarity: "clarity",
+              caratWeight: "carat-weight",
+            };
+            addAttributesFromObject(
+              product.mainDiamond,
+              "mainDiamond",
+              mainDiamondKeysMap
+            );
           }
 
           // From diamondShell
           if (product.diamondShell) {
-            Object.keys(product.diamondShell).forEach((key) => {
-              attributes.push({
-                key: key.toLowerCase().replace(/\s+/g, "-"),
-                value: [
-                  product.diamondShell[key].toLowerCase().replace(/\s+/g, "-"),
-                ],
-              });
-            });
+            const diamondShellKeysMap = {
+              material: "material",
+              size: "size",
+            };
+            addAttributesFromObject(
+              product.diamondShell,
+              "diamondShell",
+              diamondShellKeysMap
+            );
           }
 
           // From sideStone
           if (product.sideStone) {
-            Object.keys(product.sideStone).forEach((key) => {
-              attributes.push({
-                key: key.toLowerCase().replace(/\s+/g, "-"),
-                value: [
-                  product.sideStone[key]
-                    .toString()
-                    .toLowerCase()
-                    .replace(/\s+/g, "-"),
-                ],
-              });
-            });
+            const sideStoneKeysMap = {
+              sideStoneName: "side-stone",
+            };
+            addAttributesFromObject(
+              product.sideStone,
+              "sideStone",
+              sideStoneKeysMap
+            );
           }
 
           return attributes;
@@ -247,37 +276,97 @@ const ShopPage = ({ query }) => {
 
         const productAttributes = collectAttributes(product);
 
-        // Check each query parameter
-        for (const [key, queryValues] of Object.entries(query)) {
-          let attributeValues = getAttributeValue(productAttributes, key);
+        // Apply query filters
+        for (let key in query) {
+          const queryValues = Array.isArray(query[key])
+            ? query[key]
+            : [query[key]];
+          const processedQueryValues = queryValues.map((queryValue) =>
+            queryValue.toLowerCase().replace(/\s+/g, "-")
+          );
+          const attributeValues = getAttributeValue(
+            productAttributes,
+            key.toLowerCase().replace(/\s+/g, "-")
+          );
 
-          if (!attributeValues) {
-            const additionalInfo = product.additionalInformation.find(
-              (info) => info.key.toLowerCase().replace(/\s+/g, "-") === key
-            );
-            if (additionalInfo) {
-              attributeValues = [
-                additionalInfo.value.toLowerCase().replace(/\s+/g, "-"),
-              ];
-            }
-          }
+          const matchesAnyValue = processedQueryValues.some(
+            (queryValue) =>
+              attributeValues && attributeValues.includes(queryValue)
+          );
 
-          if (attributeValues) {
-            const queryValueArray = Array.isArray(queryValues)
-              ? queryValues
-              : [queryValues];
-
-            matches =
-              matches &&
-              queryValueArray.some((queryValue) =>
-                attributeValues.includes(
-                  queryValue.toLowerCase().replace(/\s+/g, "-")
-                )
-              );
-          }
-
-          if (!matches) {
+          if (!matchesAnyValue) {
+            matches = false;
             break;
+          }
+        }
+
+        // Apply brand filter
+        if (query.brand) {
+          const brandValue = query.brand
+            .toLowerCase()
+            .replace("&", "")
+            .split(" ")
+            .join("-");
+          if (
+            !product.brand ||
+            product.brand.name
+              .toLowerCase()
+              .replace("&", "")
+              .split(" ")
+              .join("-") !== brandValue
+          ) {
+            matches = false;
+          }
+        }
+
+        // Apply category filter
+        if (query.category) {
+          const categoryValue = query.category
+            .toLowerCase()
+            .replace("&", "")
+            .split(" ")
+            .join("-");
+          if (
+            !product.category ||
+            product.category.name
+              .toLowerCase()
+              .replace("&", "")
+              .split(" ")
+              .join("-") !== categoryValue
+          ) {
+            matches = false;
+          }
+        }
+
+        // Apply subCategory filter
+        if (query.subCategory) {
+          const subCategoryValue = query.subCategory
+            .toLowerCase()
+            .replace("&", "")
+            .split(" ")
+            .join("-");
+          if (
+            !product.children ||
+            product.children
+              .toLowerCase()
+              .replace("&", "")
+              .split(" ")
+              .join("-") !== subCategoryValue
+          ) {
+            matches = false;
+          }
+        }
+
+        // Apply status filter
+        if (query.status) {
+          if (query.status === "on-sale") {
+            if (product.discount <= 0) {
+              matches = false;
+            }
+          } else if (query.status === "in-stock") {
+            if (product.status !== "in-stock") {
+              matches = false;
+            }
           }
         }
 
@@ -287,44 +376,6 @@ const ShopPage = ({ query }) => {
 
     // Apply the filters
     productItems = filterProducts(productItems, query);
-
-    if (query.category) {
-      productItems = productItems.filter(
-        (p) =>
-          p.parent.toLowerCase().replace("&", "").split(" ").join("-") ===
-          query.category
-      );
-    }
-
-    if (query.subCategory) {
-      productItems = productItems.filter(
-        (p) =>
-          p.children.toLowerCase().replace("&", "").split(" ").join("-") ===
-          query.subCategory
-      );
-    }
-
-    if (query.color) {
-      productItems = productItems.filter((product) => {
-        return product.imageURLs.some(
-          (image) =>
-            image.color &&
-            image.color.name
-              .toLowerCase()
-              .replace("&", "")
-              .split(" ")
-              .join("-") === query.color
-        );
-      });
-    }
-
-    if (query.brand) {
-      productItems = productItems.filter(
-        (p) =>
-          p.brand.name.toLowerCase().replace("&", "").split(" ").join("-") ===
-          query.brand
-      );
-    }
 
     content = (
       <>

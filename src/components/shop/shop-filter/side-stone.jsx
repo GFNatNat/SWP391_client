@@ -13,13 +13,13 @@ const SideStoneFilter = ({ setCurrPage, shop_right = false }) => {
 
   // Effect to update selected sideStone based on router query
   useEffect(() => {
-    if (router.query.sideStone) {
-      const selected = Array.isArray(router.query.sideStone)
-        ? router.query.sideStone.map((c) =>
+    if (router.query["side-stone"]) {
+      const selected = Array.isArray(router.query["side-stone"])
+        ? router.query["side-stone"].map((c) =>
             c.toLowerCase().replace("&", "").split(" ").join("-")
           )
         : [
-            router.query.sideStone
+            router.query["side-stone"]
               .toLowerCase()
               .replace("&", "")
               .split(" ")
@@ -29,7 +29,7 @@ const SideStoneFilter = ({ setCurrPage, shop_right = false }) => {
     } else {
       setSelectedSideStone([]);
     }
-  }, [router.query.sideStone]);
+  }, [router.query["side-stone"]]);
 
   // Function to handle checkbox change
   const handleCheckboxChange = (sideStone) => {
@@ -56,7 +56,7 @@ const SideStoneFilter = ({ setCurrPage, shop_right = false }) => {
 
     // Build query parameters
     const queryParams = newSelectedSideStone
-      .map((c) => `sideStone=${c}`)
+      .map((c) => `side-stone=${c}`)
       .join("&");
 
     // Construct URL based on shop or shop-right-sidebar
