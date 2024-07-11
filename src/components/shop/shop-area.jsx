@@ -54,44 +54,7 @@ const ShopArea = ({ all_products, products, otherProps }) => {
     <>
       <section className="tp-shop-area pb-120">
         <div className="container">
-          <div className="row">
-            <div className="col-xl-3 col-lg-4">
-              <div className="tp-shop-sidebar mr-10">
-                {/* filter */}
-                <PriceFilter
-                  priceFilterValues={priceFilterValues}
-                  maxPrice={maxPrice}
-                />
-                <CaratWeightFilter
-                  caratWeightFilterValues={caratWeightFilterValues}
-                  maxCaratWeight={maxCaratWeight}
-                />
-                {/* material */}
-                <MaterialFilter setCurrPage={setCurrPage} />
-                {/* size */}
-                <SizeFilter setCurrPage={setCurrPage} />
-                {/* mainDiamondColor */}
-                <MainDiamondColor setCurrPage={setCurrPage} />
-                {/* sideStoneFilter */}
-                <SideStoneFilter setCurrPage={setCurrPage} />
-                {/* originFilter */}
-                <OriginFilter setCurrPage={setCurrPage} />
-                {/* cutFilter */}
-                <CutFilter setCurrPage={setCurrPage} />
-                {/* clarityFilter */}
-                <ClarityFilter setCurrPage={setCurrPage} />
-                {/* status */}
-                <StatusFilter setCurrPage={setCurrPage} />
-                {/* categories */}
-                <CategoryFilter setCurrPage={setCurrPage} />
-                {/* product rating */}
-                <TopRatedProducts />
-                {/* brand */}
-                <ProductBrand setCurrPage={setCurrPage} />
-                {/* reset filter */}
-                <ResetButton />
-              </div>
-            </div>
+          
             <div className="col-xl-9 col-lg-8">
               <div className="tp-shop-main-wrapper">
                 <div className="tp-shop-top mb-45">
@@ -176,7 +139,7 @@ const ShopArea = ({ all_products, products, otherProps }) => {
               </div>
             </div>
           </div>
-        </div>
+        
       </section>
     </>
   );

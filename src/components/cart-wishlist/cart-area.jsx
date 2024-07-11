@@ -31,8 +31,8 @@ const CartArea = () => {
                     <thead>
                       <tr>
                         <th colSpan="2" className="tp-cart-header-product">Product</th>
-                        <th className="tp-cart-header-price">Price</th>
-                        <th className="tp-cart-header-quantity">Quantity</th>
+                        <th className="tp-cart-header-price" style={{ textAlign: 'center' }}>Price</th>
+                        <th className="tp-cart-header-quantity" style={{ textAlign: 'center' }}>Quantity</th>
                         <th></th>
                       </tr>
                     </thead>

@@ -79,21 +79,7 @@ const BlogSidebar = () => {
         </div>
         {/* <!-- latest post end --> */}
 
-        {/* <!-- categories start --> */}
-        <div className="tp-sidebar-widget widget_categories mb-35">
-          <h3 className="tp-sidebar-widget-title">Categories</h3>
-          <div className="tp-sidebar-widget-content">
-            <ul>
-              <li><Link href="/blog">Farming <span>(12)</span></Link></li>
-              <li><Link href="/blog">Crisp Bread & Cake <span>(6)</span></Link></li>
-              <li><Link href="/blog">Milk & Meat <span>(2)</span></Link></li>
-              <li><Link href="/blog">Organic Fruits <span>(8)</span></Link></li>
-              <li><Link href="/blog">Sea Foods <span>(0)</span></Link></li>
-              <li><Link href="/blog">Vegetable <span>(3)</span></Link></li>
-            </ul>
-          </div>
-        </div>
-        {/* <!-- categories end --> */}
+        
 
         {/* <!-- tag cloud start --> */}
         <div className="tp-sidebar-widget mb-35">

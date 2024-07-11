@@ -258,36 +258,36 @@ const DetailsWrapper = ({
       {classificationAttributes.map((attributeGroup, index) => (
         <div key={index}>
           <h5>{attributeGroup.type}</h5>
-          <div className="attribute-options">
+          <div className="attribute-options ml-30">
             {attributeGroup.attributes.map((attribute) => (
               <div key={`${attributeGroup.type}-${attribute.key}`}>
                 <h6>{attribute.key}</h6>
                 {attribute.value.map((value) => (
                   <div key={`${attributeGroup.type}-${attribute.key}-${value}`}>
-                    <input
-                      type="radio"
-                      id={`${attributeGroup.type}-${attribute.key}-${value}`}
-                      name={`${attributeGroup.type}-${attribute.key}`}
-                      value={value}
-                      checked={
-                        selectedAttributes[attributeGroup.type]?.[
-                          attribute.key
-                        ] === value
-                      }
-                      onChange={() =>
-                        handleAttributeChange(
-                          attributeGroup.type,
-                          attribute.key,
-                          value
-                        )
-                      }
-                    />
-                    <label
-                      htmlFor={`${attributeGroup.type}-${attribute.key}-${value}`}
-                    >
-                      {value}
-                    </label>
-                  </div>
+                  <input
+                    type="radio"
+                    id={`${attributeGroup.type}-${attribute.key}-${value}`}
+                    name={`${attributeGroup.type}-${attribute.key}`}
+                    value={value}
+                    checked={
+                      selectedAttributes[attributeGroup.type]?.[
+                        attribute.key
+                      ] === value
+                    }
+                    onChange={() =>
+                      handleAttributeChange(
+                        attributeGroup.type,
+                        attribute.key,
+                        value
+                      )
+                    }
+                  />
+                  <label
+                    htmlFor={`${attributeGroup.type}-${attribute.key}-${value}`}
+                  >
+                    {value}
+                  </label>
+                </div>
                 ))}
               </div>
             ))}

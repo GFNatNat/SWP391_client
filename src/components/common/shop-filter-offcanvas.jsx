@@ -11,13 +11,26 @@ import {
   handleFilterSidebarOpen,
 } from "@/redux/features/shop-filter-slice";
 import ResetButton from "../shop/shop-filter/reset-button";
+import CaratWeightFilter from "../shop/shop-filter/carat-weight-filter";
+import MaterialFilter from "../shop/shop-filter/material";
+import SizeFilter from "../shop/shop-filter/size";
+import MainDiamondColor from "../shop/shop-filter/color";
+import SideStoneFilter from "../shop/shop-filter/side-stone";
+import OriginFilter from "../shop/shop-filter/origin";
+import MainDiamondSizeFilter from "../shop/shop-filter/main-diamond-size";
+import CutFilter from "../shop/shop-filter/cut";
+import ClarityFilter from "../shop/shop-filter/clarity";
 
 const ShopFilterOffCanvas = ({
   all_products,
   otherProps,
   right_side = false,
 }) => {
-  const { priceFilterValues, setCurrPage } = otherProps;
+  const maxCaratWeight = all_products.reduce((max, product) => {
+    return 10;
+    //return product.caratWeight > max ? product.caratWeight : max;
+  }, 0);
+  const { priceFilterValues, caratWeightFilterValues, setCurrPage } = otherProps;
   const { filterSidebar } = useSelector((state) => state.shopFilter);
   const dispatch = useDispatch();
 
@@ -49,6 +62,27 @@ const ShopFilterOffCanvas = ({
               priceFilterValues={priceFilterValues}
               maxPrice={maxPrice}
             />
+            {/* carat weight*/}
+            <CaratWeightFilter
+              caratWeightFilterValues={caratWeightFilterValues}
+              maxCaratWeight={maxCaratWeight}
+            />
+            {/* material */}
+            <MaterialFilter setCurrPage={setCurrPage} />
+            {/* size */}
+            <SizeFilter setCurrPage={setCurrPage} />
+            {/* mainDiamondColor */}
+                <MainDiamondColor setCurrPage={setCurrPage} />
+            {/* sideStoneFilter */}
+                <SideStoneFilter setCurrPage={setCurrPage} />
+            {/* originFilter */}
+                <OriginFilter setCurrPage={setCurrPage} />
+            {/* mainDiamondSizeFilter */}
+                <MainDiamondSizeFilter setCurrPage={setCurrPage} />
+            {/* cutFilter */}
+                <CutFilter setCurrPage={setCurrPage} />
+            {/* clarityFilter */}
+                <ClarityFilter setCurrPage={setCurrPage} />
             {/* status */}
             <StatusFilter setCurrPage={setCurrPage} shop_right={right_side} />
             {/* categories */}
